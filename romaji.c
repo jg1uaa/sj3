@@ -43,7 +43,9 @@
 
 extern int rkerrbell;
 
-
+unsigned short sj_zen2han(unsigned short);
+unsigned short sj_addten(unsigned short prefix, unsigned short c);
+unsigned short sj_han2zen(unsigned short c);
 
 int exec_romaji(wchar16_t c)
 {
