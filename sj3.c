@@ -62,47 +62,6 @@
 #include "common.h"
 #include "sj3.h"
 
-/* common.c */
-void inputprocess(void);
-void InitConversion(void);
-
-/* conv.c */
-void EndConversion(void);
-
-/* etc.c */
-suseconds_t UsecWeight(int);
-
-/* eucmessage.c */
-int init_messages(void);
-
-/* display.c */
-void checkterm(void);
-void start_guideline(void);
-void end_guideline(void);
-void RegionSet(int, int);
-
-/* libif.c */
-void SJ2_henkan_end(void);
-int SJ2_henkan_init(void);
-
-/* screen.c */
-void clear_guide_line(void);
-void print_guide_line(void);
-
-/* sj3ver.c */
-void print_version(void);
-
-/* sjgetchar.c */
-void output_master(void);
-void set_eucmode(void);
-
-/* sjrc2.c */
-void getsjrc(void);
-void getsjrk(int);
-
-/* stat_conv.c */
-void set_bs(int);
-
 #ifndef _PATH_UTMP
 #define _PATH_UTMP "/var/run/utmp"
 #endif

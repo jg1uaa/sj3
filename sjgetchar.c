@@ -47,19 +47,7 @@
 #include <sys/file.h>
 #include "sj2.h"
 #include "select.h"
-
-/* display.c */
-void output_master (void);
-
-/* sjgetchar.c */
-void write_stdout(unsigned char *, int);
-int SJ_read (wchar16_t *, int);
-void SJ_print (wchar16_t *);
-
-/* wc16_str.c */
-wchar16_t *sj3_wsncpy16(wchar16_t *, wchar16_t *, int);
-int sj3_mbstowcs16(wchar16_t *, unsigned char *, int);
-int sj3_wcstombs16(unsigned char *, wchar16_t *, int);
+#include "sj3.h"
 
 #if !defined(FREAD) && defined(O_RDONLY)
 #define		FREAD		(O_RDONLY+1)

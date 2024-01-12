@@ -34,6 +34,25 @@
 #ifndef _SJ3_H_
 #define _SJ3_H_  1
 
+/* common.c */
+void inputprocess(void);
+void InitConversion(void);
+
+/* conv.c */
+void EndConversion(void);
+
+/* etc.c */
+suseconds_t UsecWeight(int);
+
+/* eucmessage.c */
+int init_messages(void);
+
+/* display.c */
+void checkterm(void);
+void start_guideline(void);
+void end_guideline(void);
+void RegionSet(int, int);
+
 /* funckey.c */
 void mk_cvtkey(char *term);
 char *getkey2(char *istr, char *ostr);
@@ -46,6 +65,14 @@ int eval_key(wchar16_t *s);
 void clear_etckeys(void);
 int set_etckeys(struct wordent word[]);
 wchar16_t parse_command(wchar16_t *s, int *count);
+
+/* libif.c */
+void SJ2_henkan_end(void);
+int SJ2_henkan_init(void);
+
+/* screen.c */
+void clear_guide_line(void);
+void print_guide_line(void);
 
 /* sj3.c */
 int main(int argc, char **argv);
@@ -79,6 +106,28 @@ void SetRegion(void);
 void set_tty_size(void);
 void setsjserv(char *hname);
 char *chmyhname(char *hname);
+
+/* sj3ver.c */
+void print_version(void);
+
+/* sjgetchar.c */
+void output_master(void);
+void set_eucmode(void);
+void write_stdout(unsigned char *, int);
+int SJ_read (wchar16_t *, int);
+void SJ_print (wchar16_t *);
+
+/* sjrc2.c */
+void getsjrc(void);
+void getsjrk(int);
+
+/* stat_conv.c */
+void set_bs(int);
+
+/* wc16_str.c */
+wchar16_t *sj3_wsncpy16(wchar16_t *, wchar16_t *, int);
+int sj3_mbstowcs16(wchar16_t *, unsigned char *, int);
+int sj3_wcstombs16(unsigned char *, wchar16_t *, int);
 
 #endif /* _SJ3_H_ */
 
