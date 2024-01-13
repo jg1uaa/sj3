@@ -36,6 +36,7 @@
 
 
 #include "sj2.h"
+#include "sj3.h"
 
 
 
@@ -47,7 +48,7 @@ char		*s_key_set	="\033P%d|%02x;%02x;%02xP";
 
 #define ESCAPE	'\033'
 
-set_news ()
+void set_news(void)
 {
 	
 
