@@ -38,20 +38,20 @@
 #ifdef SVR4
 #include <sys/euc.h>
 #endif
+#include <string.h>
 #include "wchar16.h"
 #include <locale.h>
 #include "kctype.h"
 #include "common.h"
+#include "sj3.h"
 
 
 extern        char    user_name[];
 extern        char    *cur_serv, **serv_list;
 extern        char    **dict_list;
 extern        int     dict_num;
-char  *chmyhname();
 
 extern        int     current_locale;
-int sjislen(), euclen();
 
 int (*len_func[3])() = {0, sjislen, euclen};
 
@@ -63,10 +63,7 @@ int (*len_func[3])() = {0, sjislen, euclen};
 
 
 
-SJ2_henkan (yomiout, bun, kanjiout, kanjilen)
-struct bunsetu_sj3	*bun;
-wchar16_t		*yomiout, *kanjiout;
-int		kanjilen;
+int SJ2_henkan(wchar16_t *yomiout, struct bunsetu_sj3 *bun, wchar16_t *kanjiout, int kanjilen)
 {
 	int retv;
 	SJ3_BUNSETU sbun[BUFFLENGTH];
@@ -98,10 +95,8 @@ int		kanjilen;
 
 	return(retv);
 }
-int
-sjislen(str, max)
-unsigned char *str;
-int max;
+
+int sjislen(unsigned char *str, int max)
 {
 	int len = 0, bytes = 1;
 
@@ -121,9 +116,7 @@ int max;
 	return len;
 }
 
-euclen(str, max)
-unsigned char *str;
-int max;
+int euclen(unsigned char *str, int max)
 {
 	int len = 0, bytes = 1;
 
@@ -153,12 +146,7 @@ int max;
 
 
 
-SJ2_getdouon (s, d, n, choice, reconv)
-wchar16_t		*s;
-struct douon_sj3	*d;
-int		n;
-int		choice;
-int		reconv;
+int SJ2_getdouon(wchar16_t *s, struct douon_sj3 *d, int n, int choice, int reconv)
 {
 	int i, ret;
 	SJ3_DOUON d_sjis[DOUON_N];
@@ -192,15 +180,12 @@ int		reconv;
  	return(ret + 1);
 }
 
-SJ2_study (dcid)
-struct studyrec	*dcid;
+void SJ2_study(struct studyrec *dcid)
 {
 	sj3_gakusyuu(dcid);
 }
 
-SJ2_clstudy (yomi1, yomi2, dcid)
-wchar16_t		*yomi1, *yomi2;
-struct studyrec	*dcid;
+void SJ2_clstudy(wchar16_t *yomi1, wchar16_t *yomi2, struct studyrec *dcid)
 {
 	unsigned char y1[BUFFLENGTH*2];
 	unsigned char y2[BUFFLENGTH*2];
@@ -215,9 +200,7 @@ struct studyrec	*dcid;
 	}
 }
 
-SJ2_toroku (yomi, kanji, hinshi)
-wchar16_t	*yomi, *kanji;
-int	hinshi;
+int SJ2_toroku(wchar16_t *yomi, wchar16_t *kanji, int hinshi)
 {
 	unsigned char  y[(YOMILEN+1)*3];
         unsigned char  k[(KLEN+1)*3];
@@ -233,9 +216,7 @@ int	hinshi;
 	return(ret);
 }
 
-SJ2_syoukyo (yomi, kanji, hinshi)
-wchar16_t	*yomi, *kanji;
-int	hinshi;
+int SJ2_syoukyo(wchar16_t *yomi, wchar16_t *kanji, int hinshi)
 {
 	unsigned char  y[(YOMILEN+1)*3];
         unsigned char  k[(KLEN+1)*3];
@@ -251,8 +232,7 @@ int	hinshi;
 	return(ret);
 }
 
-sj_check_error (err)
-int	err;
+void sj_check_error(int err)
 {
 	if (err & SJ3_SERVER_DEAD)
 		SJ_warnning(WCServer_Dead);
@@ -274,7 +254,7 @@ int	err;
 		SJ_warnning(WCNopen_Study);
 }
 
-SJ2_reconnect ()
+int SJ2_reconnect(void)
 {
 	int err;
 
@@ -287,12 +267,12 @@ SJ2_reconnect ()
 }
 
 
-SJ2_henkan_end ()
+void SJ2_henkan_end(void)
 {
 	sj3_close ();
 }
 
-SJ2_henkan_init ()
+int SJ2_henkan_init(void)
 {
         int i, err;
 	int *err_dict = NULL;
@@ -333,7 +313,7 @@ SJ2_henkan_init ()
         }
 }
 
-sj3_autocon() 
+int sj3_autocon(void)
 {
         int i, err;
   
