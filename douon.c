@@ -35,9 +35,11 @@
 
 
 
+#include <string.h>
 #include "common.h"
 #include "key.h"
 #include "wchar16.h"
+#include "sj3.h"
 #define DNUM		5		
 
 static int		Dcount;
@@ -45,14 +47,7 @@ static int		Dpoint;
 static struct douon_sj3	HenkanDouon[DOUON_N];
 static wchar16_t		Dkanji[BUFFLENGTH * 2];
 
-void go_gakusyuu();
-
-SJ_getdouon (s, d, n, choice, reconv)
-wchar16_t		*s;
-struct douon_sj3	*d;
-int		n;
-int		choice;
-int		reconv;
+int SJ_getdouon(wchar16_t *s, struct douon_sj3 *d, int n, int choice, int reconv)
 {
 	int	len;
 
@@ -65,7 +60,7 @@ int		reconv;
 	if (Dcount <= 0) {
 		Dcount = 1;
 		len = wslen (s);
-		Strncpy ((char *)d[0].ddata, s, len);
+		Strncpy ((wchar16_t *)d[0].ddata, s, len);
 		d[0].dlen = wcbyte(s);
 		d[0].wlen = len;
 		return(0);		
@@ -75,7 +70,7 @@ int		reconv;
 
 
 
-exec_douon ()
+void exec_douon(void)
 {
 	Conversion	*cv;
 	int	val;
@@ -94,8 +89,7 @@ exec_douon ()
 		Rdisp ();
 }
 
-wrap_douon (back)
-int	back;	
+void wrap_douon(int back)
 {
 	Conversion	*cv;
 	int	val;
@@ -118,9 +112,7 @@ int	back;
 
 
 
-Cdouon (yomi, gnum)
-wchar16_t	*yomi;
-int	gnum;
+int Cdouon(wchar16_t *yomi, int gnum)
 {
 	
 
@@ -242,17 +234,17 @@ int	gnum;
  	if (HenkanDouon[Dpoint].valid) 
  		PushGD (gnum, &HenkanDouon[Dpoint].dcid);
 
-	if (gakusyuu)
+	if (gakusyuu) {
  		if (HenkanDouon[Dpoint].valid)
  			SJ2_study (&HenkanDouon[Dpoint].dcid);
  		else
  			SJ2_toroku(yomi, HenkanDouon[Dpoint].ddata, SJ3_H_NRMNOUN);
+	}
 
 	return (TRUE);
 }
 
-Dselect (lim)
-int	lim;
+int Dselect(int lim)
 {
 	extern int	keyvalue;
 	int	c, num;
@@ -289,11 +281,7 @@ int	lim;
 }
 
 
-Gdouon (yomi, num, choice, reconv)
-wchar16_t	*yomi;
-int	num;
-int	choice;
-int	reconv;
+void Gdouon(wchar16_t *yomi, int num, int choice, int reconv)
 {
 	
 
@@ -311,8 +299,7 @@ int	reconv;
 		PushGD (num, &HenkanDouon[Dpoint].dcid);
 }
 
-Sdouon (Choice)
-int Choice;
+int Sdouon(int Choice)
 {
 	Conversion	*cv;
 	int	i, j;
@@ -392,8 +379,7 @@ tail:
 
 
 
-Rdouon (back)
-int	back;	
+int Rdouon(int back)
 {
 	Conversion	*cv;
 	int	i, j;
@@ -426,8 +412,7 @@ int	back;
 	return (1);
 }
 
-Bkanji (kanji)
-wchar16_t	*kanji;
+int Bkanji(wchar16_t *kanji)
 {
 	Conversion	*cv;
 	int	i;
@@ -449,14 +434,12 @@ wchar16_t	*kanji;
 
 struct studyrec	Gdata[BUFFLENGTH];
 
-PushGD (num, wordid)
-int		num;
-struct studyrec	*wordid;
+void PushGD(int num, struct studyrec *wordid)
 {
 	Gdata[num] = *wordid;
 }
 
-cl_gakusyuu ()
+void cl_gakusyuu(void)
 {
 	Conversion	*cv;
 	int	i, j;
@@ -481,8 +464,7 @@ cl_gakusyuu ()
 	}
 }
 
-check_and_gakusyuu (m, n)
-int	m, n;
+void check_and_gakusyuu(int m, int n)
 {
 	Conversion	*cv;
 	int	i, j;
@@ -498,9 +480,7 @@ int	m, n;
 	}
 }
 
-void
-go_gakusyuu (n)
-int	n;
+void go_gakusyuu(int n)
 {
 	Conversion	*cv;
 	int	i, j;
