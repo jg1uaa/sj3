@@ -35,6 +35,7 @@
 
 
 
+#include <string.h>
 #include "wchar16.h"
 #include "kctype.h"
 #if defined(__sony_news) && defined(SVR4)
@@ -44,6 +45,7 @@
 #include "key.h"
 #include <locale.h>
 #include "Paths.h"
+#include "sj3.h"
 
 int		vflag = 1;
 extern int	shell_flag;
@@ -108,20 +110,12 @@ extern wchar16_t *Key, *Escape, *Sjxkey, *Etckey, *Intr, *Bskey, *Delkey,
 extern wchar16_t *Halpha,	*Zalpha, *Hkata, *Zkata, *Hira;
 extern wchar16_t *Shiftjis, *Sjis, *Euc, *Euc2, *Jis, *Jis2, *Kuten, *Kuten2;
 
-int     set_func(), set_etckeys(), set_intr(), 
-        set_delkey(), set_goto(), set_trap(), set_init_mode(),
-	set_helpmenu(), set_defcode(), set_muhenkan(), set_muedit(),
-        set_m_toggle(), set_guide(), set_forkshell(), set_bstudy(),
-	set_silent(), set_flush_conversion(), set_rkebell(), set_server(),
-	set_dicts();
-
-
 extern struct functbl funcs[];
 extern struct valtbl mode_val[], code_val[];
 
 #define TOLOWER(c) (isupper(c) ? tolower(c) : (c))	
 
-sjset_code()
+static void sjset_code(void)
 {
 	char *loc;
 
@@ -133,7 +127,7 @@ sjset_code()
 		user_euc = 0;
 }
 	
-sjrc_init ()
+void sjrc_init(void)
 {
 	clear_del ();
 	clear_key ();
@@ -155,7 +149,7 @@ sjrc_init ()
 
 
 
-getsjrc ()
+void getsjrc2(void)
 {
 	char *p;
 	char *getenv();
@@ -169,18 +163,18 @@ getsjrc ()
 			strcat(RCfile, "/");
 		}
 		strcat(RCfile, p);
-		if (setrc(RCfile) == TRUE)
+		if (setrc2(RCfile) == TRUE)
 			return;
 	} 
 	if (home[0] != '\0') {
 		strcpy(RCfile, home);
 		strcat(RCfile, "/");
 		strcat(RCfile, rcfile);
-		if (setrc(RCfile) == TRUE)
+		if (setrc2(RCfile) == TRUE)
 			return;
 	}
         strcpy(RCfile, DEFRCFILE);
-        if (setrc(RCfile) == TRUE)
+        if (setrc2(RCfile) == TRUE)
                 return;
 
 	RCfile[0] = '\0';
@@ -188,8 +182,7 @@ getsjrc ()
 
 
 
-setrc (file)
-char	*file;
+int setrc2(char *file)
 {
 	wchar16_t	*p;
 	char		line[MAXLINE];
@@ -204,7 +197,7 @@ char	*file;
 		return(FALSE);
 	sjrc_init ();
 	while (fgets (line, MAXLINE, fd) != NULL) {
-		if (getword(line, word) <= 0)
+		if (getword2(line, word) <= 0)
 			continue;
 		functp = funcs;
 		p = word[0].word_str;
@@ -222,8 +215,7 @@ char	*file;
 
 
 
-getsjrk (erase)
-int erase;
+void getsjrk(int erase)
 {
 	char *p;
 	int i;
@@ -273,8 +265,7 @@ int erase;
 
 
 
-match(s1, s2)
-wchar16_t *s1, *s2;
+int match(wchar16_t *s1, wchar16_t *s2)
 {
 	wchar16_t c1, c2;
 
@@ -290,9 +281,7 @@ wchar16_t *s1, *s2;
 }
 
 
-getword (s, word)
-unsigned char	*s;
-struct wordent	word[];
+int getword2(unsigned char *s, struct wordent word[])
 {
 	unsigned char	c;
 	wchar16_t *w;
@@ -401,8 +390,7 @@ struct wordent	word[];
 	return(wcount);
 }
 
-IsTerminator (c)
-unsigned char	c;
+int IsTerminator(unsigned char c)
 {
 	if (c == '\n')
 		return (1);
@@ -410,8 +398,7 @@ unsigned char	c;
 		return (0);
 }
 
-isTerminator (c)
-unsigned char	c;
+int isTerminator(unsigned char c)
 {
 	if (c == '#')
 		return (1);
@@ -419,8 +406,7 @@ unsigned char	c;
 		return (0);
 }
 
-IsEscape (c)
-unsigned char	c;
+int IsEscape(unsigned char c)
 {
 	if (c == '\\')
 		return (1);
@@ -428,8 +414,7 @@ unsigned char	c;
 		return (0);
 }
 
-IsDelimitor (c)
-unsigned char	c;
+int IsDelimitor(unsigned char c)
 {
 	if (c == ' ' || c == '\t' || c == '.')
 		return (1);
@@ -437,8 +422,7 @@ unsigned char	c;
 		return (0);
 }
 
-set_forkshell (word)
-struct wordent	word[];
+void set_forkshell(struct wordent word[])
 {
 	if (word[1].word_str[0] != '\0' && shellprog[0] == '\0') {
 /*
@@ -450,8 +434,7 @@ struct wordent	word[];
 	}
 }
 
-set_intr (word)
-struct wordent	word[];
+void set_intr(struct wordent word[])
 {
 	int	c;
 
@@ -460,8 +443,7 @@ struct wordent	word[];
 			intr_code = c;
 }
 
-set_delkey (word)
-struct wordent	word[];
+void set_delkey(struct wordent word[])
 {
 	int	c;
 
@@ -470,8 +452,7 @@ struct wordent	word[];
 			set_del (c);
 }
 
-isintr (c)
-unsigned char	c;
+int isintr(unsigned char c)
 {
 	if (c == intr_code)
 		return (1);
@@ -479,8 +460,7 @@ unsigned char	c;
 		return (0);
 }
 
-set_goto (word)
-struct wordent	word[];
+void set_goto(struct wordent word[])
 {
 	int	c;
 
@@ -489,8 +469,7 @@ struct wordent	word[];
 			goto_code[goto_num ++] = c;
 }
 
-IsGoto (c)
-unsigned char	c;
+int IsGoto(unsigned char c)
 {
 	int	i;
 
@@ -501,8 +480,7 @@ unsigned char	c;
 	return (0);
 }
 
-set_trap (word)
-struct wordent	word[];
+void set_trap(struct wordent word[])
 {
 	int	c;
 
@@ -511,8 +489,7 @@ struct wordent	word[];
 			trap_code[trap_num ++] = c;
 }
 
-IsTrap (c)
-unsigned char	c;
+int IsTrap(unsigned char c)
 {
 	int	i;
 
@@ -523,8 +500,7 @@ unsigned char	c;
 	return (0);
 }
 
-mode_key (mode)
-int mode;
+int mode_key(int mode)
 {
 	switch (mode) {
 	case MODE_HALPHA:
@@ -548,8 +524,7 @@ int mode;
 
 int	Direct = 0;
 
-set_init_mode (word)
-struct wordent	word[];
+void set_init_mode(struct wordent word[])
 {
 	Conversion	*cv;
 	int	i, j;
@@ -577,8 +552,7 @@ struct wordent	word[];
 	}
 }
 
-set_helpmenu (word)
-struct wordent	word[];
+void set_helpmenu(struct wordent word[])
 {
 	if (match (word[1].word_str, WCOff))
 		HHlevel = Hlevel = 1;
@@ -586,8 +560,7 @@ struct wordent	word[];
 		HHlevel = Hlevel = 2;
 }
 
-set_defcode (word)
-struct wordent	word[];
+void set_defcode(struct wordent word[])
 {
 	wchar16_t *p;
 	int i;
@@ -601,8 +574,7 @@ struct wordent	word[];
 	}
 }
 
-set_muhenkan (word)
-struct wordent	word[];
+void set_muhenkan(struct wordent word[])
 {
 	int	i;
 	wchar16_t	*p;
@@ -616,8 +588,7 @@ struct wordent	word[];
 	}
 }
 
-set_muedit (word)
-struct wordent	word[];
+void set_muedit(struct wordent word[])
 {
 	int	i;
 	wchar16_t	*p;
@@ -631,8 +602,7 @@ struct wordent	word[];
 	}
 }
 
-set_m_toggle (word)
-struct wordent	word[];
+void set_m_toggle(struct wordent word[])
 {
 	if (match (word[1].word_str, WCOn))
 		muhenkan_toggle = 1;
@@ -640,14 +610,12 @@ struct wordent	word[];
 		muhenkan_toggle = 0;
 }
 
-set_silent (word)
-struct wordent	word[];
+void set_silent(struct wordent word[])
 {
 	vflag = 0;
 }
 
-set_bstudy (word)
-struct wordent	word[];
+void set_bstudy(struct wordent word[])
 {
 	if (match (word[1].word_str, WCOn))
 		bstudy = 1;
@@ -655,12 +623,12 @@ struct wordent	word[];
 		bstudy = 0;
 }
 
-is_bstudy ()
+int is_bstudy(void)
 {
 	return (bstudy);
 }
 
-eval_muhenkan ()
+int eval_muhenkan(void)
 {
 	Conversion	*cv;
 
@@ -671,13 +639,12 @@ eval_muhenkan ()
 		return (def_muhenkan);
 }
 
-value_muhenkan ()
+int value_muhenkan(void)
 {
 	return (def_muedit);
 }
 
-set_guide (word)
-struct wordent	word[];
+void set_guide(struct wordent word[])
 {
 	int	i;
 
@@ -776,8 +743,7 @@ struct wordent	word[];
 	}
 }
 
-set_flush_conversion (word)
-struct wordent	word[];
+void set_flush_conversion(struct wordent word[])
 {
 	if (match (word[1].word_str, WCOn))
 		flush_conversion = 1;
@@ -785,8 +751,7 @@ struct wordent	word[];
 		flush_conversion = 0;
 }
 
-set_server(word)
-struct wordent	word[];
+void set_server(struct wordent word[])
 {
         int i, j, size;
         char *p;
@@ -821,8 +786,7 @@ struct wordent	word[];
 
 #define DICT_SUFFIX ".dic"
 
-set_dict(word)
-struct wordent	word[];
+void set_dict(struct wordent word[])
 {
         int i, j, size, suffix_len;
         char *p;
