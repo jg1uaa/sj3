@@ -35,18 +35,17 @@
 
 
 
+#include <string.h>
 #include "common.h"
 #include "key.h"
+#include "sj3.h"
 
 extern int	keyvalue;
 static char   rehname[SHORTLENGTH * 2];
 extern char   *cur_serv;
 static int dcflag = 0;
 
-void disp_version();
-
-exec_etc (key)
-int	key;
+int exec_etc(int key)
 {
 	unsigned short	row, col;
 	int	inc;
@@ -159,8 +158,7 @@ normal:
 	return(KEY_NORMAL);
 }
 
-Ssbun(flag)
-int flag;
+void Ssbun(int flag)
 {
 	Conversion *cv;
 	static short ScurBun, SpreBun;
@@ -170,7 +168,7 @@ int flag;
 		if (cv->CurBun != ScurBun || cv->PreBun != SpreBun) {
 			cv->CurBun = ScurBun;
 			cv->PreBun = SpreBun;
-			Bdisp();
+			Bdisp(1);
 		}
 	} else {
 		ScurBun = cv->CurBun;
@@ -178,8 +176,7 @@ int flag;
 	}
 }
 
-etc_map (key)
-int	key;
+int etc_map(int key)
 {
 	extern int	u_etckeys;
 	extern int	Uetckey[], Uetcval[];
@@ -217,7 +214,7 @@ int	key;
 	return (val);
 }
 
-helplevel ()
+void helplevel(void)
 {
 	wchar16_t                 wtmp[BUFFLENGTH];
 	unsigned char           mtmp[BUFFLENGTH];
@@ -243,9 +240,7 @@ helplevel ()
 	guide_print_pause (WCGHelp, wtmp);
 }
 
-void
-disp_version (c)
-int	c;
+void disp_version(int c)
 {
 	extern char	*Version, *Copyright, *Date;
 	char		tmp[BUFFLENGTH];
@@ -262,7 +257,7 @@ int	c;
 	guide_print_pause (0, wtmp);
 }
 
-exec_sjrc ()
+void exec_sjrc(void)
 {
 	extern char	RCfile[];
 	char		tmp[BUFFLENGTH];
@@ -270,9 +265,9 @@ exec_sjrc ()
 	wchar16_t        wtmp[BUFFLENGTH];
 
 
-	if (*RCfile == (char)NULL) {
-		getsjrc();
-		if (*RCfile == (char)NULL) 
+	if (*RCfile == '\0') {
+		getsjrc2();
+		if (*RCfile == '\0')
 	        {
 			(void) wcstombs((char *)SUCCorFAIL, WCNOTHsjrc, BUFFLENGTH);
 			sprintf((char *)tmp, (char *)SUCCorFAIL);
@@ -285,7 +280,7 @@ exec_sjrc ()
 			(void) mbstowcs(wtmp, tmp, BUFFLENGTH);
 		}
 	} else {
-		if (setrc () == TRUE)
+		if (setrc2 (RCfile) == TRUE)
 	        {
 			(void) wcstombs((char *)SUCCorFAIL, WCSUCCsjrc, BUFFLENGTH);
 		} else {
@@ -300,7 +295,7 @@ exec_sjrc ()
 static int	weight = 3;
 static int	seed = 100000;	
 
-change_weight ()
+void change_weight(void)
 {
 	int	c;
 	char		s[2];
@@ -320,8 +315,7 @@ change_weight ()
 	}
 }
 
-UsecWeight (sw)
-int	sw;
+suseconds_t UsecWeight(int sw)
 {
 	
 
@@ -331,8 +325,7 @@ int	sw;
 		return (seed * weight);
 }
 
-dconnect(aflag)
-int aflag;
+int dconnect(int aflag)
 {
         int err;
 	char tmp[BUFFLENGTH];
@@ -364,21 +357,20 @@ int aflag;
 	return(dcflag);
 }
 
-set_dcflag(flag)
-int flag;
+void set_dcflag(int flag)
 {
 	dcflag = flag;
 }
 
-IsDcflag()
+int IsDcflag(void)
 {
 	return(dcflag);
 }
 
-reconnect ()
+int reconnect(void)
 {
 	int	inc, err;
-	char		tmp[BUFFLENGTH], *hp;
+	char		tmp[BUFFLENGTH];
 	char		newserv[SHORTLENGTH * 2], *nsp;
 	wchar16_t wtmp[BUFFLENGTH];
 	unsigned char rtmp[BUFFLENGTH];
@@ -464,8 +456,7 @@ reconnect ()
         return(1);
 }			
 
-guide_print_pause (s1, s2)
-wchar16_t *s1, *s2;
+int guide_print_pause(wchar16_t *s1, wchar16_t *s2)
 {
 	int	c;
 
@@ -478,5 +469,3 @@ wchar16_t *s1, *s2;
 	}
 	return (c);
 }
-
-
