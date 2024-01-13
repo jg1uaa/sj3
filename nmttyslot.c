@@ -40,19 +40,19 @@
 
 
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
 
 
 
 
-static char	*getttys();
+static	char	*getttys(int);
 static	char	*ttys	= "/etc/ttys";
 
-#define	NULL	0
-
-nmttyslot (name)
-char	*name;
+int nmttyslot(char *name)
 {
 	char	*tp, *p;
 	int	s, tf;
@@ -66,7 +66,7 @@ char	*name;
 	if ((tf = open (ttys, 0)) < 0)
 		return(0);
 	s = 0;
-	while (tp = getttys (tf)) {
+	while ((tp = getttys (tf))) {
 		s++;
 		if (strcmp (p, tp) == 0) {
 			close (tf);
@@ -77,9 +77,7 @@ char	*name;
 	return (0);
 }
 
-static char *
-getttys (f)
-int	f;
+static char *getttys(int f)
 {
 	static char line[LINESIZE];
 	char *lp;
@@ -110,4 +108,3 @@ top:
 		goto top;
 	return (lp);
 }
-
