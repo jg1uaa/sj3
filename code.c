@@ -44,18 +44,17 @@
 #include "sj2.h"
 #include "key.h"
 #include "rk.h"
+#include "sj3lib.h"
+#include "sj3.h"
 
 static unsigned char cbuf[5];
 static int	cur_code = CODE_EUC;
 extern int      current_locale;
 static int ccnt = 0;
 
-codeconv(c, rkstr)
-wchar16_t c;
-unsigned int *rkstr;
+void codeconv(wchar16_t c, unsigned int *rkstr)
 {
-	unsigned short ccode, i;
-        unsigned short CheckCcode();
+	unsigned short ccode;
 	extern int erase_char;
 
 	if (c == erase_char) {
@@ -90,9 +89,7 @@ unsigned int *rkstr;
 	*rkstr = RKEND;
 }
 
-unsigned short
-CheckCcode (c)
-wchar16_t c;
+unsigned short CheckCcode(wchar16_t c)
 {
         unsigned char c1;
         unsigned short code;
@@ -149,8 +146,7 @@ wchar16_t c;
         return(code);
 }
 
-unsigned short
-strtocode()
+unsigned short strtocode(void)
 {
         int c;
         unsigned short code;
@@ -180,8 +176,7 @@ strtocode()
 	}
 }
 
-void
-ChangeCode (void)
+void ChangeCode(void)
 {
 	if (cur_code == CODE_KUTEN2)
 		cur_code = CODE_SJIS;
@@ -201,14 +196,12 @@ ChangeCode (void)
 	}
 }
 
-SetCode(code)
-int code;
+void SetCode(int code)
 {
 	cur_code = code;
 }
 
-GetCcode()
+int GetCcode(void)
 {
 	return(cur_code);
 }
-
