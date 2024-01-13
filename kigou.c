@@ -38,6 +38,7 @@
 #include "common.h"
 #include "kctype.h"
 #include "key.h"
+#include "sj3.h"
 
 #define BEGIN_CODE	0x2121		
 #define END_CODE	0x7f7e
@@ -47,14 +48,12 @@ static int      lastcode        = BEGIN_CODE;
 
 static unsigned short	row, col;
 
-void input_kigou();
-
-kigou ()
+int kigou(void)
 {
 	extern int	keyvalue;
         int    increse, code, basecode;
         int             inc, ki, low;
-        unsigned short  num, CheckCcode(), strtocode();
+        unsigned short  num;
 	int		rval;
 
 	increse = INCRESE;
@@ -188,8 +187,7 @@ top:
 	return (rval);
 }
 
-IsRedraw (c)
-int	c;
+int IsRedraw(int c)
 {
 	if (c == 0x0c)
 		return (1);
@@ -197,8 +195,7 @@ int	c;
 		return (0);
 }
 
-IsCKey (inc)
-int	inc;
+int IsCKey(int inc)
 {
 	switch (inc) {
 	case 'l':
@@ -214,8 +211,7 @@ int	inc;
 	}
 }
 
-guide_kigou (bcode, code, increse)
-int	bcode, code, increse;
+void guide_kigou(int bcode, int code, int increse)
 {
 	int	i;
 	extern wchar16_t	Mguide[];
@@ -247,8 +243,7 @@ int	bcode, code, increse;
 }
 
 
-pkigou (code)
-int    code;
+void pkigou(int code)
 {
 	wchar16_t	tmp[3];
         unsigned short ccode;
@@ -269,9 +264,7 @@ int    code;
         SJ_print (tmp);
 }
 
-void
-input_kigou (basecode, code, increse)
-int	basecode, code, increse;
+void input_kigou(int basecode, int code, int increse)
 {
 	wchar16_t	s[2];
         unsigned short ccode, svlen;
