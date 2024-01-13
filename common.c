@@ -36,6 +36,15 @@
 
 
 #include "conversion.h"
+#include "sj3.h"
+
+wchar16_t osave_buf[BUFFLENGTH * 2];
+unsigned short osave_mode[BUFFLENGTH * 2];
+unsigned short isave_mode[BUFFLENGTH * 2];
+unsigned short os_point;
+
+wchar16_t hsave_buf[BUFFLENGTH];
+unsigned short hs_point;
 
 int	allways_buff = 0;		
 int	no_flush = 0;			
@@ -47,8 +56,7 @@ int	flush_conversion;
 Conversion	*current_conversion;
 Conversion	*default_conversion;
 
-Conversion *
-AllocConversion ()
+Conversion *AllocConversion(void)
 {
 	Conversion	*c;
 
@@ -75,60 +83,54 @@ AllocConversion ()
 
 static Conversion	*push_conversion;
 
-FreeConversion (c)
-Conversion	*c;
+void FreeConversion(Conversion *c)
 {
 	if (c == push_conversion)
 		push_conversion = 0;
 	free (c);
 }
 
-SetConversion (c)
-Conversion	*c;
+void SetConversion(Conversion *c)
 {
 	PushConversion (current_conversion);
 	current_conversion = c;
 }
 
-PushConversion (c)
-Conversion	*c;
+void PushConversion(Conversion *c)
 {
 	push_conversion = c;
 }
 
-PopConversion ()
+void PopConversion(void)
 {
 	if (push_conversion)
 		current_conversion = push_conversion;
 }
 
-Conversion *
-GetConversion ()
+Conversion *GetConversion(void)
 {
 	return (current_conversion);
 }
 
-InitConversion ()
+void InitConversion(void)
 {
 	default_conversion = AllocConversion ();
 	DefaultConversion ();
 }
 
-DefaultConversion ()
+void DefaultConversion(void)
 {
 	current_conversion = default_conversion;
 }
 
-EndConversion ()
+void EndConversion(void)
 {
 	free (default_conversion);
 }
 
-int
-wcbyte(str)
-wchar16_t *str;
+int wcbyte(wchar16_t *str)
 {
-	count=0;
+	int count=0;
 
 	while (*str) {
 		if (WcHighMASK & *str++) 
