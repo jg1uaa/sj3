@@ -36,11 +36,13 @@
 
 
 #include <errno.h>
+#include <string.h>
 #include "wchar16.h"
 #include "select.h"
 #include "key.h"
 #include "inkey.h"
 #include "common.h"
+#include "sj3.h"
 
 
 #define MSEC	300
@@ -91,13 +93,13 @@ extern	int	Unumber;
 
 
 
-convert_stat ()
+void convert_stat(void)
 {
 	stat_init ();
 	stat_conv ();
 }
 
-inputprocess ()
+void inputprocess(void)
 {
 	int	c;
 	wchar16_t		obuf[2];
@@ -137,7 +139,7 @@ int		buf_count = 0;
 int		pars_n;
 static int	escape = 0;
 
-inkey ()
+wchar16_t inkey(void)
 {
 	Conversion	*cv;
 	int	i, j;
@@ -194,9 +196,7 @@ inkey ()
 	return (c);
 }
 
-sequence (buf, count)
-wchar16_t         *buf;
-int	*count;
+int sequence(wchar16_t *buf, int *count)
 {
 	
 
@@ -226,7 +226,7 @@ int	*count;
 			}
 		}
 		if ((n = SJ_read (s, KEYBUFLIM)) <= 0) {
-			return (parse_escape (buf, *count, 0));
+			return (parse_escape (buf, count, 0));
 		}
 		s += n;
 		*count += n;
@@ -240,10 +240,7 @@ int	*count;
 
 
 
-parse_escape (s, count, more)
-wchar16_t *s;
-int	*count;
-int		more;
+int parse_escape(wchar16_t *s, int *count, int more)
 {
 	int	i, j;
 	wchar16_t		temp[KEYBUFSIZ];
@@ -333,8 +330,7 @@ int		more;
 	}
 }
 
-write_pseq (mod)
-int	mod;
+wchar16_t write_pseq(int mod)
 {
 	
 
@@ -369,4 +365,3 @@ int	mod;
 	pars_n = 0;
 	return (0);
 }
-
