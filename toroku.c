@@ -38,6 +38,8 @@
 #include "common.h"
 #include "key.h"
 #include "wchar16.h"
+#include "sj3.h"
+
 #define YOMILEN	32
 #define KLEN	64
 
@@ -45,7 +47,7 @@ extern struct valtbl hin_val[];
 
 extern int	keyvalue;
 
-exec_toroku ()
+int exec_toroku(void)
 {
 	Conversion	*cv;
 	wchar16_t			yomi[YOMILEN+1], kanji[KLEN+1];
@@ -116,9 +118,7 @@ exec_toroku ()
 	return (val);
 }
 
-getyomi (yomi, lim, prompt, kanji)
-wchar16_t	*yomi, *prompt, *kanji;
-int	lim;
+int getyomi(wchar16_t *yomi, int lim, wchar16_t *prompt, wchar16_t *kanji)
 {
 	int	inc, c;
 	Conversion *cv;
@@ -189,7 +189,7 @@ int	lim;
 	return (0);
 }
 
-gethinshi()
+int gethinshi(void)
 {
 	int inc, hcode;
 
@@ -208,12 +208,10 @@ gethinshi()
 	return(hcode);
 }
 	
-getcheck (yomi, kanji, hinshi, prompt)
-wchar16_t	*yomi, *kanji, *hinshi, *prompt;
+int getcheck(wchar16_t *yomi, wchar16_t *kanji, wchar16_t *hinshi, wchar16_t *prompt)
 {
 	int	c;
 	unsigned char	tmp[BUFFLENGTH + KLEN];
-	extern wchar16_t  *Y;
 	wchar16_t         wtmp[BUFFLENGTH + KLEN];
 	unsigned char   ktmp[KLEN+1], ytmp[YOMILEN+1], htmp[YOMILEN+1],
 	                ttmp[BUFFLENGTH];
@@ -266,9 +264,7 @@ wchar16_t	*yomi, *kanji, *hinshi, *prompt;
 	return (0);
 }
 
-getkstr (s, lim, guide)
-wchar16_t	*s, *guide;
-int	lim;
+int getkstr(wchar16_t *s, int lim, wchar16_t *guide)
 {
 	Conversion	*cv;
 	int		i;
@@ -298,8 +294,7 @@ int	lim;
 	return (chbun);
 }
 
-getbunsetu (kanji, guide)
-wchar16_t	*kanji, *guide;
+int getbunsetu(wchar16_t *kanji, wchar16_t *guide)
 {
 	Conversion	*cv;
 	int		c;
@@ -400,7 +395,7 @@ wchar16_t	*kanji, *guide;
 	return (len);
 }
 
-exec_syoukyo ()
+int exec_syoukyo(void)
 {
 	int 	i;
 	wchar16_t		yomi[YOMILEN+1], kanji[KLEN+1];
