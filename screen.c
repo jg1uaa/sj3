@@ -37,6 +37,7 @@
 
 #include "common.h"
 #include "key.h"
+#include "sj3.h"
 
 #define LINE_LENGTH	80
 
@@ -46,8 +47,7 @@ static wchar16_t	Cguide[LINE_LENGTH + 1];
 wchar16_t		Mguide[LINE_LENGTH + 1];
 
 
-vbackchar (n)
-int	n;
+void vbackchar(int n)
 {
 	int	i;
 
@@ -62,7 +62,7 @@ int	n;
 
 
 
-wrap_off ()
+void wrap_off(void)
 {
 	Conversion	*cv;
 
@@ -71,7 +71,7 @@ wrap_off ()
 	cv->PushCurrentVcol = cv->CurrentVcol;
 }
 
-wrap_on ()
+void wrap_on(void)
 {
 	Conversion	*cv;
 
@@ -82,7 +82,7 @@ wrap_on ()
 
 
 
-Vput_space ()
+void Vput_space(void)
 {
 	Conversion	*cv;
 
@@ -97,7 +97,7 @@ Vput_space ()
 
 
 
-VBackspace ()
+void VBackspace(void)
 {
 	Conversion	*cv;
 	int	i;
@@ -130,26 +130,20 @@ VBackspace ()
 
 
 
-master_out (s, n)
-wchar16_t	*s;
-int	n;
+void master_out (wchar16_t *s, int n)
 {
 	master_write (s, n);
 	master_flush ();
 }
 
-master_write (s, n)
-wchar16_t	*s;
-int	n;
+void master_write(wchar16_t *s, int n)
 {
 	SJ_write (s, n);
 }
 
 
 
-vprintU (s, mod)
-wchar16_t	*s;
-char	mod;	
+void vprintU(wchar16_t *s, char mod)
 {
 	Conversion	*cv;
 	int		i, col, oldcol, len;
@@ -184,9 +178,7 @@ char	mod;
 
 
 
-vprintR (s, mod)
-wchar16_t	*s;
-char	mod;	
+void vprintR(wchar16_t *s, char mod)
 {
 	Conversion	*cv;
 	int		i, col, oldcol, len;
@@ -221,9 +213,7 @@ char	mod;
 
 
 
-IprintU (s, index)
-wchar16_t	*s;
-int	index;
+void IprintU(wchar16_t *s, int index)
 {
 	Cgoto (index);
 	printU (s);
@@ -232,9 +222,7 @@ int	index;
 
 
 
-IprintR (s, index)
-wchar16_t	*s;
-int	index;
+void IprintR(wchar16_t *s, int index)
 {
 	Cgoto (index);
 	printR (s);
@@ -243,8 +231,7 @@ int	index;
 
 
 
-printU (s)
-wchar16_t	*s;
+void printU(wchar16_t *s)
 {
 	under_in ();
 	SJ_print (s);
@@ -253,8 +240,7 @@ wchar16_t	*s;
 
 
 
-printR (s)
-wchar16_t	*s;
+void printR(wchar16_t *s)
 {
 	reverse_in ();
 	SJ_print (s);
@@ -263,7 +249,7 @@ wchar16_t	*s;
 
 
 
-Csave ()
+void Csave(void)
 {
 	Conversion	*cv;
 
@@ -274,8 +260,7 @@ Csave ()
 	cv->Vindex[cv->Vlen] = cv->MaxVcol = cv->CurrentVcol;
 }
 
-SetVcol (index)
-int	index;
+void SetVcol(int index)
 {
 	Conversion	*cv;
 
@@ -284,7 +269,7 @@ int	index;
 	cv->CurrentVcol = cv->Vindex[cv->Vlen];
 }
 
-Cload ()
+void Cload(void)
 {
 	Conversion	*cv;
 
@@ -292,8 +277,7 @@ Cload ()
 	CursorSet (cv->SavedRow, cv->SavedCol);
 }
 
-Cclear (redraw)
-int	redraw;
+void Cclear(int redraw)
 {
 	Conversion	*cv;
 	int	spaces;
@@ -311,8 +295,7 @@ int	redraw;
 	Flush ();
 }
 
-Cgoto (index)
-int	index;
+void Cgoto(int index)
 {
 	Conversion	*cv;
 	int	row, col;
@@ -324,7 +307,7 @@ int	index;
 	CursorSet (row, col);
 }
 
-ClearToMax ()
+void ClearToMax(void)
 {
 	Conversion	*cv;
 	int	space;
@@ -334,7 +317,7 @@ ClearToMax ()
 	put_space (space);
 }
 
-Ccheck ()
+void Ccheck(void)
 {
 	Conversion	*cv;
 	int	row, tmp, diff;
@@ -351,8 +334,7 @@ Ccheck ()
 	}
 }
 
-spaceR (s)
-wchar16_t	*s;
+void spaceR(wchar16_t *s)
 {
 	wchar16_t	*t;
 	wchar16_t		tmp[40];
@@ -375,7 +357,7 @@ wchar16_t	*s;
 
 
 
-clear_guide_line ()
+void clear_guide_line(void)
 {
 	unsigned short	row, col;
 
@@ -385,7 +367,7 @@ clear_guide_line ()
 	Flush ();
 }
 
-print_guide_line ()
+void print_guide_line(void)
 {
 	unsigned short	row, col;
 
@@ -396,8 +378,7 @@ print_guide_line ()
 	Flush ();
 }
 
-set_guide_line (mode)
-int	mode;
+void set_guide_line(int mode)
 {
 	
 
@@ -415,7 +396,7 @@ int	mode;
 	}
 }
 
-disp_mode ()
+void disp_mode(void)
 {
 	Conversion	*cv;
 	int	c_code;
@@ -484,15 +465,14 @@ disp_mode ()
 	print_guide_line ();
 }
 
-TopGuide ()
+void TopGuide(void)
 {
 	unsigned short	row, col;
 
 	StartGuide (&row, &col);
 }
 
-guide_print (s1, s2)
-wchar16_t	*s1, *s2;
+void guide_print(wchar16_t *s1, wchar16_t *s2)
 {
 	unsigned short	row, col;
 
