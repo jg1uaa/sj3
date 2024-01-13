@@ -35,17 +35,16 @@
 
 
 
+#include <string.h>
 #include "common.h"
 #include "key.h"
-
-void Chain();
+#include "sj3.h"
 
 static wchar16_t	*jpoint;
 static int	iedit, jedit;
 static int	ilen, jlen;
 
-push_obj (i, j)
-int	i, j;
+void push_obj(int i, int j)
 {
 	Conversion	*cv;
 
@@ -57,8 +56,7 @@ int	i, j;
 	jedit = cv->Bkettei[j];
 }
 
-pop_obj (i, j)
-int	i, j;
+void pop_obj(int i, int j)
 {
 	Conversion	*cv;
 
@@ -72,7 +70,7 @@ int	i, j;
 
 
 
-Bbig ()
+int Bbig(void)
 {
 	Conversion	*cv;
 	int		i, j, k;
@@ -134,8 +132,7 @@ Bbig ()
 
 
 
-Bsmall (small)
-int	small;		
+int Bsmall(int small)
 {
 	Conversion	*cv;
 	int	i, j, k, moji;
@@ -237,8 +234,7 @@ int	small;
 }
 
 
-void
-Bdelete ()
+void Bdelete(void)
 {
 	Conversion	*cv;
 	int	i, j, deletelen, val;
@@ -288,10 +284,7 @@ Bdelete ()
 }
 
 
-void
-Chain (n, len)
-int	n;
-int	len;
+void Chain(int n, int len)
 {
 	Conversion	*cv;
 	int		i;
@@ -337,7 +330,7 @@ int	len;
 
 static int Elimit;
 static int Ehlimit;
-exec_edit ()
+int exec_edit(void)
 {
 	Conversion	*cv;
 	int		edit, inc, i;
@@ -352,7 +345,6 @@ exec_edit ()
 	wchar16_t			number[3];
 	wchar16_t			tmp[3];
 	int			num, numpoint;
-	extern char	*Gedit;
 
 	cv = GetConversion ();
 	bun = cv->CurBun;
@@ -466,7 +458,7 @@ exec_edit ()
 			
 		case 'i':
 			num = getnum (number, &numpoint);
-			if (editlen = Insert(Htmp, Ztmp, Omode, Zcol)) {
+			if ((editlen = Insert(Htmp, Ztmp, Omode, Zcol))) {
 				len += editlen;
 				Zcol += editlen;
 				edited = 1;
@@ -516,7 +508,7 @@ exec_edit ()
 				beep ();
 				break;
 			}
-			if (editlen = Substitute(Htmp,Ztmp,Omode,&Zcol,num)) {
+			if ((editlen = Substitute(Htmp,Ztmp,Omode,&Zcol,num))) {
 				len += editlen;
 			}
 			if (Zcol >= 1) {
@@ -596,9 +588,7 @@ exec_edit ()
 	return (0);			
 }
 
-getnum (number, numpoint)
-wchar16_t	number[];
-int	*numpoint;
+int getnum(wchar16_t number[], int *numpoint)
 {
 	char temp[3];
 	int i=0;
@@ -614,10 +604,7 @@ int	*numpoint;
 	return (atoi (temp));
 }
 
-Replace(Hs, Zs, omode, cur, num)
-wchar16_t	*Hs, *Zs;
-unsigned short *omode;
-int cur, num;
+int Replace(wchar16_t *Hs, wchar16_t *Zs, unsigned short *omode, int cur, int num)
 {
 	int	i, len, inc;
 	int		beep_on, icur1, icur2;
@@ -627,10 +614,10 @@ int cur, num;
 
 	*roma = '\0';
 	*kana = '\0';
-	SaveConversion(GetConversion());
+	SaveConversion();
 	while (1) {
 		inc = inkey();
-		if (AnotherConversion(GetConversion())) {
+		if (AnotherConversion()) {
 			unget_key(inc);
 			*kana = '\0';
 			break;
@@ -692,10 +679,7 @@ int cur, num;
 }
 
 
-Substitute(Hs, Zs, omode, cur, num)
-wchar16_t	*Hs, *Zs;
-unsigned short *omode;
-int *cur, num;
+int Substitute(wchar16_t *Hs, wchar16_t *Zs, unsigned short *omode, int *cur, int num)
 {
 	wchar16_t		work[DLEN + 1];
 	wchar16_t		work2[DLEN + 1];
@@ -714,16 +698,13 @@ int *cur, num;
 
 	Flush ();
 	(void)EditDel(Hs, Zs, omode, *cur, num);
-	if (len = Insert(Hs, Zs, omode, *cur))
+	if ((len = Insert(Hs, Zs, omode, *cur)))
 		*cur += len;
 	len -= num;
 	return (len);
 }
 
-Insert(Hs, Zs, omode, cur)
-wchar16_t	*Hs, *Zs;
-unsigned short *omode;
-int cur;
+int Insert(wchar16_t *Hs, wchar16_t *Zs, unsigned short *omode, int cur)
 {
 	int	inc, len, i;
 	int		limit, hlimit, ylen, res, icur, rlen;
@@ -739,10 +720,10 @@ int cur;
 	hlimit = Ehlimit - strlen((char *)Hs);
 	*ztmp = '\0';
 	*htmp = '\0';
-	SaveConversion (GetConversion ());
+	SaveConversion ();
 	while (1) {
 		inc = inkey ();
-		if (AnotherConversion (GetConversion ())) {
+		if (AnotherConversion ()) {
 			unget_key (inc);
 			sj3_rkclear();
 			return(0);
@@ -788,10 +769,7 @@ int cur;
 	return (len);
 }
 
-EditDel (Hs, Zs, omode, cur, num)
-wchar16_t	*Hs, *Zs;
-unsigned short *omode;
-int	cur, num;
+int EditDel(wchar16_t *Hs, wchar16_t *Zs, unsigned short *omode, int cur, int num)
 {
 	int	i, j;
 	int		icur, len, rlen;
@@ -822,17 +800,13 @@ int	cur, num;
 	return (len);
 }
 
-chhstr(Hs, Zs, omode, cur)
-wchar16_t *Hs, *Zs;
-unsigned short *omode;
-int cur;
+void chhstr(wchar16_t *Hs, wchar16_t *Zs, unsigned short *omode, int cur)
 {
-	int i, j, len;
+	int i, j;
 	int prep, nextp;
 	int hprep, hnextp;
 	wchar16_t hkana[BUFFLENGTH], *hkp;
 
-	len = wslen(Zs);
 	prep = cur;
 	hprep = getipos2(omode, prep);
 	nextp = cur + 1;
@@ -852,8 +826,7 @@ int cur;
 	wscpy(&Hs[hprep], hkana);
 }
 
-Print_EOL (s)
-wchar16_t *s;
+void Print_EOL(wchar16_t *s)
 {
 	if (*s != '\0')
 		SJ_print (s);
@@ -862,8 +835,7 @@ wchar16_t *s;
 		backspace (wcbyte (s));
 }
 
-backspace (n)
-int	n;
+void backspace(int n)
 {
 	int	i;
 
