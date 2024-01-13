@@ -37,7 +37,7 @@
 
 #include "sj2.h"
 
-print_version ()
+void print_version(void)
 {
   extern int	vflag;
   extern char	*version;
