@@ -35,16 +35,16 @@
 
 
 
+#include <string.h>
 #include "common.h"
 #include "key.h"
 #include "wchar16.h"
 #include "kctype.h"
-
-void Rdisp();
+#include "sj3.h"
 
 int	i_point;		
 
-exec_henkan ()
+void exec_henkan(void)
 {
 	Conversion	*cv;
 	int		i, j;
@@ -226,8 +226,7 @@ exec_henkan ()
 	cv->Kanji = 1;
 }
 
-addBun(cur, end)
-int cur, end;
+void addBun(int cur, int end)
 {
 	int i;
 	Conversion *cv;
@@ -241,8 +240,7 @@ int cur, end;
 	}
 }
 
-delspan(cur)
-int cur;
+void delspan(int cur)
 {
 	int i;
 	Conversion *cv;
@@ -255,8 +253,7 @@ int cur;
 	}
 }
 
-delBun(cur, end)
-int cur, end;
+void delBun(int cur, int end)
 {
 	int i;
 	Conversion *cv;
@@ -273,21 +270,18 @@ int cur, end;
 }
 
 
-IsHex (c)
-wchar16_t c;
+int IsHex(wchar16_t c)
 {
 	return(iswxdigit(c));
 }
 
-Getcode (in, out)
-wchar16_t	*in, *out;
+void Getcode(wchar16_t *in, wchar16_t *out)
 {
 	int  c, i, j;
 	unsigned char   s[5];
         int             base, c_code;
         unsigned short  code;
 	wchar16_t       sw[5];
-	wchar16_t       tmp[3];
 
 	*out = (wchar16_t) '\0';
         i = 0;
@@ -350,10 +344,7 @@ wchar16_t	*in, *out;
 
 static unsigned char	load_mode;
 
-load_bun (num, s, type)
-int	num;
-wchar16_t	*s;
-unsigned char	type;
+int load_bun(int num, wchar16_t *s, unsigned char type)
 {
 	Conversion	*cv;
 	int	len, ilen;
@@ -423,10 +414,7 @@ unsigned char	type;
 	return(len);
 }
 
-load_bun2(num, htmp, ztmp, omode)
-int	num;
-wchar16_t	*htmp, *ztmp;
-unsigned short *omode;
+int load_bun2(int num, wchar16_t *htmp, wchar16_t *ztmp, unsigned short *omode)
 {
 	Conversion	*cv;
 	int	i;
@@ -470,9 +458,7 @@ unsigned short *omode;
 	return(len);
 }
 
-getistr(s, ostr, len)
-wchar16_t *s, *ostr;
-int len;
+int getistr(wchar16_t *s, wchar16_t *ostr, int len)
 {
 	int ipos, opos;
 	Conversion *cv;
@@ -492,8 +478,7 @@ int len;
 	return(rlen);
 }
 
-exec_muhenkan (first)
-int	first;
+void exec_muhenkan(int first)
 {
 	Conversion	*cv;
 
@@ -534,9 +519,7 @@ int	first;
 
 static unsigned char	Bstr_mode;
 
-Bstr (bnum, s)
-int	bnum;
-wchar16_t	*s;
+int Bstr(int bnum, wchar16_t *s)
 {
 	Conversion	*cv;
 	int	i, len;
@@ -587,8 +570,7 @@ wchar16_t	*s;
 
 
 
-mode_muhenkan (mod, bkettei)
-int	mod, bkettei;
+int mode_muhenkan(int mod, int bkettei)
 {
 	int	def;
 
@@ -604,8 +586,7 @@ int	mod, bkettei;
 	return (KEY_ZHIRA);
 }
 
-Bchange (mod)
-int	mod;
+void Bchange(int mod)
 {
 	Conversion	*cv;
 	int	i;
@@ -660,7 +641,7 @@ int	mod;
 
 
 
-Bdisp (redraw)
+void Bdisp(int redraw)
 {
 	Conversion	*cv;
 	int	i;
@@ -705,8 +686,7 @@ Bdisp (redraw)
 }
 
 
-void
-Rdisp ()
+void Rdisp(void)
 {
 	Conversion	*cv;
 	int	i;
@@ -755,9 +735,7 @@ Rdisp ()
 	Flush ();
 }
 
-AfterAllPrint (from, Total)
-int	from;
-int	Total;
+void AfterAllPrint(int from, int Total)
 {
 	Conversion	*cv;
 	int	i;
@@ -804,8 +782,7 @@ int	Total;
 }
 
 
-void
-Bright ()
+void Bright(void)
 {
 	Conversion	*cv;
 	int	flag;
@@ -827,8 +804,7 @@ Bright ()
 }
 
 
-void
-Bleft ()
+void Bleft(void)
 {
 	Conversion	*cv;
 	int	flag;
@@ -850,8 +826,7 @@ Bleft ()
 }
 
 
-void
-Blast ()
+void Blast(void)
 {
 	Conversion	*cv;
 
@@ -868,8 +843,7 @@ Blast ()
 }
 
 
-void
-Btop ()
+void Btop(void)
 {
 	Conversion	*cv;
 
@@ -883,5 +857,3 @@ Btop ()
 	}
 	Rdisp();
 }
-
-
