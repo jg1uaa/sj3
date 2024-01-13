@@ -35,16 +35,17 @@
 
 
 
+#include <string.h>
 #include "common.h"
 #include "rk.h"
 #include "key.h"
+#include "sj3.h"
 
 extern int rkerrbell;
 
 
 
-exec_romaji(c)
-wchar16_t	c;
+int exec_romaji(wchar16_t c)
 {
 	Conversion	*cv;
 	wchar16_t *p;
@@ -54,7 +55,7 @@ wchar16_t	c;
 	unsigned char mode;
 	int len, i;
 	unsigned int rkstr[MAXLLEN], *rkp;
-	extern char erase_str[];
+	extern wchar16_t erase_str[];
 
 	cv = GetConversion ();
 	op = cv->out_point;
@@ -209,8 +210,7 @@ wchar16_t	c;
 	return(i);
 }
 
-move_cur(kval)
-int kval;
+void move_cur(int kval)
 {
 	Conversion *cv;
 	int i;
@@ -252,8 +252,7 @@ int kval;
 	}
 }
 
-addten(pos, c)
-unsigned short pos, c;
+unsigned short addten(unsigned short pos, unsigned short c)
 {
 	unsigned short prefix;
 	Conversion *cv;
@@ -263,8 +262,7 @@ unsigned short pos, c;
 	return(sj_addten(prefix, c));
 }
 
-getipos(pos)
-unsigned short pos;
+unsigned short getipos(unsigned short pos)
 {
 	Conversion *cv;
 
@@ -272,9 +270,7 @@ unsigned short pos;
 	return(getipos2(cv->out_mode, pos));
 }
 
-getipos2(omode, pos)
-unsigned short *omode;
-unsigned short pos;
+unsigned short getipos2(unsigned short *omode, unsigned short pos)
 {
 	unsigned short ipos;
 	int i;
@@ -286,9 +282,7 @@ unsigned short pos;
 	return(ipos);
 }
 
-sj_rkconv(s1, s2, len)
-wchar16_t *s1, *s2;
-int len;
+int sj_rkconv(wchar16_t *s1, wchar16_t *s2, int len)
 {
 	int i, rlen;
 	unsigned int *kp;
@@ -342,10 +336,7 @@ int len;
 	return(klen);
 }
 
-sj_rkconv2(s1, s2, omode, len)
-wchar16_t *s1, *s2;
-unsigned short *omode;
-int len;
+int sj_rkconv2(wchar16_t *s1, wchar16_t *s2, unsigned short *omode, int len)
 {
 	int i, rlen;
 	unsigned int *kp;
@@ -459,10 +450,7 @@ int len;
 
 
 
-exec_romaji2(c, hbuf, kbuf, omode, cur, hcur)
-wchar16_t	c, *hbuf, *kbuf;
-unsigned short *omode;
-int cur, hcur;
+int exec_romaji2(wchar16_t c, wchar16_t *hbuf, wchar16_t *kbuf, unsigned short *omode, int cur, int hcur)
 {
 	unsigned short c1, cc;
 	unsigned int c2;
