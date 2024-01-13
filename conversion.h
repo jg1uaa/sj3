@@ -33,7 +33,8 @@
  * $SonyDate: 1994/06/03 08:03:43 $
  */
 
-
+#ifndef SJ3_CONVERSION_H_
+#define SJ3_CONVERSION_H_
 
 #include "sj2.h"
 #include "sj3libsj3.h"
@@ -105,10 +106,12 @@ typedef struct _Conversion {
 } Conversion;
 
 
-wchar16_t osave_buf[BUFFLENGTH * 2];  
-unsigned short osave_mode[BUFFLENGTH * 2];
-unsigned short isave_mode[BUFFLENGTH * 2];
-unsigned short os_point;
+extern wchar16_t osave_buf[BUFFLENGTH * 2];
+extern unsigned short osave_mode[BUFFLENGTH * 2];
+extern unsigned short isave_mode[BUFFLENGTH * 2];
+extern unsigned short os_point;
 
-wchar16_t hsave_buf[BUFFLENGTH];
-unsigned short hs_point;
+extern wchar16_t hsave_buf[BUFFLENGTH];
+extern unsigned short hs_point;
+
+#endif /* SJ3_CONVERSION_H_ */
