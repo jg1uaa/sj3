@@ -112,7 +112,7 @@ int Pid_shell;
 
 int current_locale; 
 
-int main (int argc, char** argv)
+int main(int argc, char** argv)
 {
 	init (argv);		
 	get_ttymode ();         
@@ -120,7 +120,7 @@ int main (int argc, char** argv)
 	parsearg (argc, argv);	
 	InitConversion ();
 	checkterm ();		
-	getsjrc ();		
+	getsjrc2 ();
 	print_version ();	
 	getsjrk(erase_char);	
 	sjinit ();		
@@ -129,7 +129,7 @@ int main (int argc, char** argv)
 	done (0);
 }
 
-void makecore (__attribute__((unused)) int a)
+void makecore(__attribute__((unused)) int a)
 {
 	chdir ("/tmp");
 	setgid (getgid ());
@@ -138,7 +138,7 @@ void makecore (__attribute__((unused)) int a)
 }
 
 
-static void (*set_signal_handler (int sig, void (*handler)(int)))(int)
+static void (*set_signal_handler(int sig, void (*handler)(int)))(int)
 {
 	struct sigaction act, oact;
 	sigset_t mask;
@@ -152,7 +152,7 @@ static void (*set_signal_handler (int sig, void (*handler)(int)))(int)
 }
 
 
-void init (char** argv)
+void init(char** argv)
 {
 	set_signal_handler (SIGTERM, done);
 	set_signal_handler (SIGWINCH, SIG_IGN);
@@ -215,7 +215,7 @@ void init_env(void)
 }
 
 
-void parsearg (int argc, char** argv)
+void parsearg(int argc, char** argv)
 {
 	int	ap;
 	char	c;
@@ -314,7 +314,7 @@ void usage(void)
 }
 
 
-void sjinit (void)
+void sjinit(void)
 {
 	getfixtty ();		
 	setshellname ();	
@@ -326,7 +326,7 @@ void sjinit (void)
 }
 
 
-void setshellname (void)
+void setshellname(void)
 {
 	char	*s;
 	char	*namep;
@@ -355,7 +355,7 @@ void setshellname (void)
 }
 
 
-void getfixtty (void)
+void getfixtty(void)
 {
 	getmaster ();		
 	fixtty ();		
@@ -363,7 +363,7 @@ void getfixtty (void)
 }
 
 
-void get_ttymode (void)
+void get_ttymode(void)
 {
 	tcgetattr (0, &b);
 	erase_char = b.c_cc[VERASE];
@@ -375,7 +375,7 @@ void get_ttymode (void)
 }
 
 
-void getmaster (void)
+void getmaster(void)
 {
 	int n;
 
@@ -390,7 +390,7 @@ void getmaster (void)
 }
 
 
-void set_jmode (void)
+void set_jmode(void)
 {
 	char *loc;
 
@@ -415,7 +415,7 @@ void set_jmode (void)
 }
 
 
-void fixtty (void)
+void fixtty(void)
 {
 	struct termios sbuf;
 
@@ -439,7 +439,7 @@ void fixtty (void)
 }
 
 
-void setdev (void)
+void setdev(void)
 {
 	char	*cp;
 	struct group	*ttygrp;
@@ -513,7 +513,7 @@ void setdev (void)
 
 static char	shellbuf[128];
 
-void forkshell (void)
+void forkshell(void)
 {
 	Pid_shell = fork ();
 	if (Pid_shell < 0) {
@@ -536,7 +536,7 @@ void forkshell (void)
 }
 
 
-void sj3_setenv (char* ename, char* eval, char* buf)
+void sj3_setenv(char* ename, char* eval, char* buf)
 {
 	char *cp, *dp;
 	char **ep = environ;
@@ -555,7 +555,7 @@ void sj3_setenv (char* ename, char* eval, char* buf)
 }
 
 
-void shellprocess (void)
+void shellprocess(void)
 {
 #if defined(__linux__)
 	struct utmp Utmp;
@@ -650,14 +650,14 @@ void shellprocess (void)
 }
 
 
-void getslave (void)
+void getslave(void)
 {
 	tcsetattr (slave, TCSAFLUSH, &b);
 	(void) ioctl(slave, TIOCSWINSZ, (char *)&Ttysize);
 }
 
 
-void execcmd (char* cmd, char** ap)
+void execcmd(char* cmd, char** ap)
 {
 	int	c;
 	char	*getenv ();
@@ -694,14 +694,14 @@ void execcmd (char* cmd, char** ap)
 }
 
 
-void fail (__attribute__((unused)) int a)
+void fail(__attribute__((unused)) int a)
 {
 	(void) kill (0, SIGTERM);
 	done (0);
 }
 
 
-void done (__attribute__((unused)) int a)
+void done(__attribute__((unused)) int a)
 {
 	set_signal_handler (SIGWINCH, SIG_IGN);
 
@@ -711,7 +711,7 @@ void done (__attribute__((unused)) int a)
 }
 
 
-void done2 (void)
+void done2(void)
 {
 	chown (slave_name, 0, 0);
 	chmod (slave_name, 0666);
@@ -727,14 +727,14 @@ void done2 (void)
 }
 
 
-void done3 (void)
+void done3(void)
 {
 	aprintf ("\r\nexit %s.\r\n", progname);
 	exit (0);
 }
 
 
-void exitprocess (__attribute__((unused)) int a)
+void exitprocess(__attribute__((unused)) int a)
 {
 	int		status;
 
@@ -746,7 +746,7 @@ void exitprocess (__attribute__((unused)) int a)
 }
 
 
-void suspend (void)
+void suspend(void)
 {
 	void		(*old_sigtstp)(int);
 	SELECT_FD	ifds;
@@ -796,7 +796,7 @@ cont:
 }
 
 #if defined(__linux__)
-void clearutmpentry (void)
+void clearutmpentry(void)
 {
 	struct utmp             Utmp;
 
@@ -815,7 +815,7 @@ void clearutmpentry (void)
 	endutent();
 }
 #else /* __linux__ */
-void clearutmpentry (void)
+void clearutmpentry(void)
 {
 	int			f;
 	struct utmp		Utmp;
@@ -834,7 +834,7 @@ void clearutmpentry (void)
 #endif /* __linux__ */
 
 
-void onwinch (__attribute__((unused)) int a)
+void onwinch(__attribute__((unused)) int a)
 {
 	int ttypgrp;
 	Conversion	*cv;
@@ -877,7 +877,7 @@ void onwinch (__attribute__((unused)) int a)
 }
 
 
-void SetRegion (void)
+void SetRegion(void)
 {
 	set_tty_size ();
 	
@@ -886,7 +886,7 @@ void SetRegion (void)
 }
 
 
-void set_tty_size (void)
+void set_tty_size(void)
 {
 	ioctl (master, TIOCSWINSZ, &Ttysize);
 }
