@@ -146,12 +146,12 @@ void output_master(void)
 	}
 }
 
-void set_eucmode (void)
+void set_eucmode(void)
 {
        eucmode = 1;
 }
 
-int SJ_write (wchar16_t *s, int n)
+int SJ_write(wchar16_t *s, int n)
 {
 	int	val;
 	wchar16_t wb[BUFFLENGTH];
@@ -200,7 +200,7 @@ void write_stdout(unsigned char *s, int n)
 }
 
 
-int SJ_read (wchar16_t *s, int n)
+int SJ_read(wchar16_t *s, int n)
 {
 	unsigned char buff[BUFFLENGTH];
 	wchar16_t wcbuff[BUFFLENGTH];
@@ -261,12 +261,12 @@ int SJ_read (wchar16_t *s, int n)
 	return(wnum);
 }
 
-void SJ_warnning (wchar16_t *s)
+void SJ_warnning(wchar16_t *s)
 {
 	SJ_print (s);
 }
 
-void SJ_print (wchar16_t *s)
+void SJ_print(wchar16_t *s)
 {
 	unsigned char buff[BUFFLENGTH * 3];
 	size_t num;
@@ -276,7 +276,7 @@ void SJ_print (wchar16_t *s)
 	  printf("%s", buff);
 }
 
-void SJ_through (wchar16_t *s, int n)
+void SJ_through(wchar16_t *s, int n)
 {
 	SJ_write (s, n);
 }
