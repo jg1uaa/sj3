@@ -33,6 +33,9 @@
  * $SonyDate: 1996/02/15 02:22:59 $
  */
 
+#ifndef SJ3_SJTOOL_H_
+#define SJ3_SJTOOL_H_
+
 #if defined(__NetBSD__)
 #define LACKOF_SETLOCALE
 #endif
@@ -61,3 +64,5 @@
 #define	EXEC_FORCE	13
 
 #define	SingleShift2	0x8e
+
+#endif /* SJ3_SJTOOL_H_ */

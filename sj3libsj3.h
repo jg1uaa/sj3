@@ -34,6 +34,8 @@
  */
 
 
+#ifndef SJ3_SJ3LIBSJ3_H_
+#define SJ3_SJ3LIBSJ3_H_
 
 #include "wchar16.h"
 #include "sj3lib.h"
@@ -61,3 +63,4 @@ typedef	struct douon_sj3 {
 } SJ3_DOUON_SJ3;
 
 
+#endif /* SJ3_SH3LIBSJ3_H_ */
