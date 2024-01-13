@@ -113,8 +113,7 @@ int	comstrvalue[KEY_OTHER] = {
 	};
 
 
-void
-mk_cvtkey(char* term)
+void mk_cvtkey(char *term)
 {
 	char *p;
 	char line[MAXLINE], rstr[16];
@@ -157,8 +156,7 @@ mk_cvtkey(char* term)
 	}
 }
 
-char *
-getkey2(char* istr, char* ostr)
+char *getkey2(char *istr, char *ostr)
 {
 	char *p;
 	int i;
@@ -183,15 +181,13 @@ getkey2(char* istr, char* ostr)
 }
 
 
-void
-clear_ukeys (void)
+void clear_ukeys(void)
 {
 	Unumber = 0;
 }
 
 
-void
-set_func (struct wordent word[])
+void set_func(struct wordent word[])
 {
 	int	i, num;
 	wchar16_t *p, *s;
@@ -230,8 +226,7 @@ set_func (struct wordent word[])
 }
 
 
-wchar16_t
-eval_keys (wchar16_t* s, wchar16_t* p)
+wchar16_t eval_keys(wchar16_t *s, wchar16_t *p)
 {
 	wchar16_t	c, i;
 
@@ -256,8 +251,7 @@ eval_keys (wchar16_t* s, wchar16_t* p)
 }
 
 
-void
-clear_key (void)
+void clear_key(void)
 {
 	clear_commkeys ();
 	clear_etckeys ();
@@ -265,14 +259,12 @@ clear_key (void)
 }
 
 
-void
-clear_commkeys (void)
+void clear_commkeys(void)
 {
 	comnumber = 0;
 }
 
-int
-eval_key (wchar16_t* s)
+int eval_key(wchar16_t *s)
 {
 	wchar16_t	c;
 
@@ -295,15 +287,13 @@ eval_key (wchar16_t* s)
 }
 
 
-void
-clear_etckeys (void)
+void clear_etckeys(void)
 {
 	u_etckeys = 0;
 }
 
 
-int
-set_etckeys (struct wordent word[])
+int set_etckeys(struct wordent word[])
 {
 	int	i;
 
@@ -330,8 +320,7 @@ set_etckeys (struct wordent word[])
 }
 
 
-wchar16_t
-parse_command (wchar16_t* s, int* count)
+wchar16_t parse_command(wchar16_t *s, int *count)
 {
 	extern wchar16_t	pars_seq[];
 	extern int	pars_n;
@@ -352,4 +341,3 @@ parse_command (wchar16_t* s, int* count)
 	}
 	return (KEY_NORMAL);
 }
-
