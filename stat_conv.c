@@ -35,9 +35,11 @@
 
 
 
+#include <string.h>
 #include "common.h"
 #include "key.h"
 #include "rk.h"
+#include "sj3.h"
 
 
 
@@ -50,8 +52,7 @@ static int	bskey;
 #define SPAN_FLUSH		0
 #define SPAN_END		1
 
-save_span (mode)
-int	mode;
+void save_span(int mode)
 {
 	Conversion	*cv;
 
@@ -75,7 +76,7 @@ int	mode;
 	}
 }
 
-save_span_p ()
+void save_span_p(void)
 {
 	Conversion	*cv;
 
@@ -84,7 +85,7 @@ save_span_p ()
 	cv->span_l[cv->span_point] = 0;
 }
 
-isspaned ()
+int isspaned(void)
 {
 	Conversion	*cv;
 
@@ -97,7 +98,7 @@ isspaned ()
 
 
 
-buffers_clear ()
+void buffers_clear(void)
 {
 	Conversion	*cv;
 
@@ -109,7 +110,7 @@ buffers_clear ()
 		cv->CurBun = 0;
 }
 
-pointer_clear ()
+void pointer_clear(void)
 {
 	Conversion	*cv;
 
@@ -135,7 +136,7 @@ typedef struct	_SaveSet {
 
 static SaveSet		save_set0;
 
-StoreSaveSet ()
+void StoreSaveSet(void)
 {
 	Conversion	*cv;
 	SaveSet	*sv;
@@ -154,7 +155,7 @@ StoreSaveSet ()
 	}
 }
 
-RestoreSaveSet ()
+void RestoreSaveSet(void)
 {
 	Conversion	*cv;
 	SaveSet	*sv;
@@ -173,7 +174,7 @@ RestoreSaveSet ()
 	}
 }
 
-history_empty ()
+int history_empty(void)
 {
 	SaveSet		*sv;
 
@@ -184,7 +185,7 @@ history_empty ()
 		return (1);
 }
 
-History ()
+void History(void)
 {
 	Conversion	*cv;
 	SaveSet		*sv;
@@ -200,7 +201,7 @@ History ()
 	}
 }
 
-ClearBuffer ()
+void ClearBuffer(void)
 {
 	Clear_EOL();
 	Ccheck ();
@@ -210,7 +211,7 @@ ClearBuffer ()
 
 
 
-SetCflag ()
+void SetCflag(void)
 {
 	Conversion	*cv;
 
@@ -218,7 +219,7 @@ SetCflag ()
 	cv->Cflag = 1;
 }
 
-ClearCflag ()
+void ClearCflag(void)
 {
 	Conversion	*cv;
 
@@ -226,7 +227,7 @@ ClearCflag ()
 	cv->Cflag = 0;
 }
 
-IsCflag ()
+int IsCflag(void)
 {
 	Conversion	*cv;
 
@@ -234,7 +235,7 @@ IsCflag ()
 	return (cv->Cflag);
 }
 
-exec_kettei ()
+void exec_kettei(void)
 {
 	Conversion	*cv;
 	int		len;
@@ -274,8 +275,7 @@ exec_kettei ()
 	SetCflag ();
 }
 
-set_rkebell(word)
-struct wordent  word[];
+void set_rkebell(struct wordent word[])
 {
 	if (match (word[1].word_str, WCOn))
 		rkerrbell = 1;
@@ -285,7 +285,7 @@ struct wordent  word[];
 
 
 
-ChangeBuffMode ()
+void ChangeBuffMode(void)
 {
 	Conversion	*cv;
 
@@ -299,7 +299,7 @@ ChangeBuffMode ()
 	}
 }
 
-BuffYes ()
+int BuffYes(void)
 {
 	Conversion	*cv;
 
@@ -315,7 +315,7 @@ BuffYes ()
 #define STAT_HENKAN	1
 #define STAT_MUHENKAN	2
 
-IsHenkan ()
+int IsHenkan(void)
 {
 	Conversion	*cv;
 
@@ -323,7 +323,7 @@ IsHenkan ()
 	return (cv->henkanflag);
 }
 
-IsMuhenkan ()
+int IsMuhenkan(void)
 {
 	Conversion	*cv;
 
@@ -331,7 +331,7 @@ IsMuhenkan ()
 	return (cv->henkanflag & STAT_MUHENKAN);
 }
 
-SetMuhenkan ()
+void SetMuhenkan(void)
 {
 	Conversion	*cv;
 
@@ -339,7 +339,7 @@ SetMuhenkan ()
 	cv->henkanflag |= STAT_MUHENKAN;
 }
 
-SetHenkan ()
+void SetHenkan(void)
 {
 	Conversion	*cv;
 
@@ -347,7 +347,7 @@ SetHenkan ()
 	cv->henkanflag = STAT_HENKAN;
 }
 
-ResetHenkan ()
+void ResetHenkan(void)
 {
 	Conversion	*cv;
 
@@ -355,7 +355,7 @@ ResetHenkan ()
 	cv->henkanflag = 0;
 }
 
-all_set_up ()
+void all_set_up(void)
 {
 	buffers_clear ();	
 	SetCflag ();		
@@ -366,12 +366,12 @@ all_set_up ()
 static int	convertflag;	
 static int	small;
 
-stat_conv_on ()
+void stat_conv_on(void)
 {
 	convertflag = 1;	
 }
 
-stat_init ()
+void stat_init(void)
 {
 	stat_conv_on ();
 	all_set_up ();
@@ -379,12 +379,12 @@ stat_init ()
 	small = 0;
 }
 
-get_pseq ()
+int get_pseq(void)
 {
 	return (write_pseq (1));
 }
 
-stat_conv ()
+void stat_conv(void)
 {
 	Conversion	*cv;
 	extern int	allways_buff;	
@@ -548,6 +548,7 @@ more:
 				}
 				break;
 			}
+			/* FALLTHROUGH */
 		case KEY_TOGGLE:
 		case KEY_ZHIRA:
 		case KEY_HALPHA:
@@ -651,6 +652,7 @@ more:
 			small = 0;
 			if (IsCflag () && (inc = get_pseq ()) != 0)
 				exec_ctrl(inc);
+			/* FALLTHROUGH */
 		case KEY_ETC:
 		case KEY_HELP:
 		case KEY_SJRC:
@@ -707,7 +709,7 @@ more:
 }
 
 
-save_obuf()
+void save_obuf(void)
 {
         Conversion     *cv;
         int    i, cur;
@@ -741,7 +743,7 @@ save_obuf()
 }
 
 
-restore_obuf()
+void restore_obuf(void)
 {
         Conversion     *cv;
         int    i;
@@ -766,8 +768,7 @@ restore_obuf()
         }
 }
 
-exec_ctrl(c)
-int c;
+void exec_ctrl(int c)
 {
 	Conversion *cv;
 	wchar16_t	s[3];
@@ -801,8 +802,7 @@ int c;
 	}
 }
 
-exec_mode (key)
-int	key;
+void exec_mode(int key)
 {
 	Conversion	*cv;
 
@@ -818,8 +818,7 @@ int	key;
                 cv->Imode = eval_mode(key);
 }
 
-toggle_mode (mod)
-int	mod;
+int toggle_mode(int mod)
 {
 	int	value;
 
@@ -843,8 +842,7 @@ int	mod;
 	return (value);
 }
 
-eval_mode (key)
-int	key;
+int eval_mode(int key)
 {
 	int		mod;
 
@@ -868,8 +866,7 @@ int	key;
 	return (mod);
 }
 
-IsESC (c)
-wchar16_t c;
+int IsESC(wchar16_t c)
 {
 	if (c == ESC)
 		return (1);
@@ -877,16 +874,13 @@ wchar16_t c;
 		return (0);
 }
 
-Strncpy (d, s, len)
-wchar16_t *d, *s;
-int	len;
+void Strncpy(wchar16_t *d, wchar16_t *s, int len)
 {
 	if ((len > 0) && (s != (wchar16_t *) NULL))
 	        (void)wsncpy(d, s, len);
 }
 
-is_bsdel (c)
-int	c;
+int is_bsdel(int c)
 {
 	if (is_bs (c) || is_del (c))
 		return (1);
@@ -894,25 +888,22 @@ int	c;
 		return (0);
 }
 
-clear_del ()
+void clear_del(void)
 {
 	delkey = -1;
 }
 
-set_bs (c)
-int	c;
+void set_bs(int c)
 {
 	bskey = c;
 }
 
-set_del (c)
-int	c;
+void set_del(int c)
 {
 	delkey = c;
 }
 
-is_bs (c)
-int	c;
+int is_bs(int c)
 {
 	if (c == bskey)
 		return (1);
@@ -920,8 +911,7 @@ int	c;
 		return (0);
 }
 
-is_del (c)
-int	c;
+int is_del(int c)
 {
 	if (c == delkey)
 		return (1);
@@ -931,12 +921,12 @@ int	c;
 
 static Conversion	*saved_conversion;
 
-SaveConversion ()
+void SaveConversion(void)
 {
 	saved_conversion = GetConversion ();
 }
 
-AnotherConversion ()
+int AnotherConversion(void)
 {
 	if (saved_conversion == GetConversion ())
 		return (0);
