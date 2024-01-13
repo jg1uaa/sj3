@@ -40,6 +40,7 @@
 #include "kctype.h"
 #include "sj3libsj3.h"
 #include "sj2.h"
+#include "sj3.h"
 
 unsigned char *EucMessages[] = {
  (unsigned char *)"\243\323\243\312\243\263\241\241\241\241\241\241\241\241\241\241\241\241\241\241",
@@ -279,8 +280,7 @@ struct wcvtkey wcvtkeytbl[CURWCVTKEY];
 
 
 
-int 
-init_wcvtkey()
+void init_wcvtkey(void)
 {
 	int i = 0;
 
@@ -322,8 +322,7 @@ wchar16_t *comstr[KEY_OTHER];
 
 
 
-int
-init_comstr()
+void init_comstr(void)
 {
 	 comstr[0] = WCStart;     comstr[1] = WCHenkan;     comstr[2] = WCMuhen;
 	 comstr[3] = WCKettei;    comstr[4] = WCHira;       comstr[5] = WCHalpha;
@@ -343,8 +342,7 @@ struct valtbl hin_val[5];
 
 
 
-int
-init_hin_val()
+void init_hin_val(void)
 {
 	hin_val[0].keyword = WCMeishi; hin_val[0].ivalue = SJ3_H_NRMNOUN;
 	hin_val[1].keyword = WCMyouji; hin_val[1].ivalue = SJ3_H_LNAME;
@@ -354,23 +352,16 @@ init_hin_val()
 }	
 
 
-extern int   set_func(), set_etckeys(), set_intr(),
-        set_delkey(), set_goto(), set_trap(), set_init_mode(),
-	set_helpmenu(), set_defcode(), set_muhenkan(), set_muedit(),
-        set_m_toggle(), set_guide(), set_forkshell(), set_bstudy(),
-	set_silent(), set_flush_conversion(), set_rkebell(), set_server(),
-	set_dict();
 #define CURFUNCS 29
 struct functbl funcs[CURFUNCS];
 
 
 
-int
-init_funcs()
+void init_funcs(void)
 {
 	funcs[0].keyword = WCKey;               funcs[0].func = set_func;
 	funcs[1].keyword = WCEscape;            funcs[1].func = set_func;
-	funcs[2].keyword = WCEtckey;            funcs[2].func = set_etckeys;
+	funcs[2].keyword = WCEtckey;            funcs[2].func = (void (*)())set_etckeys;
 	funcs[3].keyword = WCIntr;              funcs[3].func = set_intr;
 	funcs[4].keyword = WCDelkey;            funcs[4].func = set_delkey;
 	funcs[5].keyword = WCSetnormal;         funcs[5].func = set_goto;
@@ -397,8 +388,7 @@ struct valtbl mode_val[5];
 
 
 
-int
-init_mode_val()
+void init_mode_val(void)
 {
 	mode_val[0].keyword = WCHalpha; mode_val[0].ivalue = MODE_HALPHA;
 	mode_val[1].keyword = WCZalpha; mode_val[1].ivalue = MODE_ZALPHA;
@@ -411,8 +401,7 @@ struct valtbl code_val[8];
 
 
 
-int
-init_code_val()
+void init_code_val(void)
 {
 	code_val[0].keyword = WCShiftjis; code_val[0].ivalue = CODE_SJIS;
 	code_val[1].keyword = WCSjis;     code_val[1].ivalue = CODE_SJIS;
@@ -424,8 +413,7 @@ init_code_val()
 	code_val[7].keyword = WCKuten2;   code_val[7].ivalue = CODE_KUTEN2;
 }
 
-int
-init_messages()
+int init_messages(void)
 {
 #define LOCALELEN 20
 	char cur_loc[LOCALELEN];
@@ -487,4 +475,3 @@ Fail:
 	}
 	return FALSE;
 }
-
