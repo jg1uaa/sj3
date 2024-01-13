@@ -386,7 +386,7 @@ struct wcvtkey {
 
 struct functbl {
         wchar16_t *keyword;
-        int (*func)();
+	void (*func)();
 };
 
 #endif 
