@@ -27,6 +27,9 @@
  *
  */
 
+#ifndef SJ3_SJ2_H_
+#define SJ3_SJ2_H_
+
 #include "wchar16.h"
 
 #include "sj_sysvdef.h"
@@ -192,3 +195,5 @@ struct valtbl {
 };
 
 #define aprintf	printf
+
+#endif /* SJ3_SJ2_H_ */
