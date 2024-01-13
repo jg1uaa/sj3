@@ -40,6 +40,10 @@
 #include "common.h"
 #include "inkey.h"
 #include "select.h"
+#include <string.h>
+#include <curses.h>
+#include <term.h>
+#include "sj3.h"
 
 char bp[TCBUFSIZE];		
 char bpwork[AREASIZE];		
@@ -56,9 +60,7 @@ char	*CM,*US,*UE,*SO,*SE,*CE,*CS,*BEL,*RP,*AP,*TS,*FS,*DS,*I2;
 char	*SC,*RC,*SR,*DO;
 static int keyboard = OTHER_KB;
 
-
-
-checkterm ()
+void checkterm(void)
 {
 	char	*kb, *area, *tgetstr (), *tmp;
 	int	val;
@@ -84,11 +86,11 @@ checkterm ()
 	} else {
 		cv->line = val;
 	}
-        if (tmp = getenv("ROWS")) {
+        if ((tmp = getenv("ROWS"))) {
 	        (void) sscanf(tmp, "%d", &val);
 	        cv->line = val;
 	}
-        if (tmp = getenv("COLUMNS")) {
+        if ((tmp = getenv("COLUMNS"))) {
 	        (void) sscanf(tmp, "%d", &val);
 	        cv->column = val;
 	}
@@ -157,24 +159,23 @@ checkterm ()
 	strcpy (cmove, CM);
 }
 
-void outc(c)
-char	c;
+int outc(int c)
 {
-	putchar (c);
+	return putchar (c);
 }
 
-void erroutc(c)
+int erroutc(int c)
 {
-	fputc (c, stderr);
+	return fputc (c, stderr);
 }
 
-start_guideline ()
+void start_guideline(void)
 {
 	if (status_line && I2)
 		tputs(I2, 1, erroutc);
 }
 
-end_guideline ()
+void end_guideline(void)
 {
 	if (status_line) {
 		tputs(DS, 1, outc);
@@ -182,8 +183,7 @@ end_guideline ()
 	}
 }
 
-put_space (n)
-int	n;
+void put_space(int n)
 {
 	int	i;
 
@@ -191,12 +191,12 @@ int	n;
 		putchar (' ');
 }
 
-Backspace ()
+void Backspace (void)
 {
 	putchar (BS);
 }
 
-master_flush ()
+int master_flush(void)
 {
 	SELECT_FD	ifds;
 	int		nc;
@@ -225,7 +225,7 @@ cont:
 	return (0);
 }
 
-ThroughIntr ()
+int ThroughIntr(void)
 {
 	wchar16_t	s[2];
 
@@ -241,38 +241,38 @@ ThroughIntr ()
 	}
 }
 
-under_in ()
+void under_in(void)
 {
 	tputs(US, 1, outc);
 }
 
-under_out ()
+void under_out(void)
 {
 	tputs(UE, 1, outc);
 }
 
-reverse_in ()
+void reverse_in(void)
 {
 	tputs(SO, 1, outc);
 }
 
-reverse_out ()
+void reverse_out(void)
 {
 	tputs(SE, 1, outc);
 }
 
 
 
-beep ()
+int beep(void)
 {
 	tputs(BEL, 1, outc);
 	Flush ();
+	return 0; /*OK*/
 }
 
 
 
-CursorSet (row, col)
-unsigned short	row, col;
+void CursorSet(unsigned short row, unsigned short col)
 {
 	tputs(tgoto(CM, col - 1, row - 1), 1, outc);
 	Flush ();
@@ -280,8 +280,7 @@ unsigned short	row, col;
 
 
 
-RegionSet (row1, row2)
-int row1, row2;
+void RegionSet(int row1, int row2)
 {
 	
 
@@ -303,8 +302,7 @@ int row1, row2;
 
 int	master_flush_flag = 1;
 
-CursorRead (row, col)
-unsigned short	*row, *col;
+void CursorRead(unsigned short *row, unsigned short *col)
 {
 	
 	int	count;
@@ -340,8 +338,7 @@ unsigned short	*row, *col;
 #define MARKER	'%'			
 #define SEPARA	';'			
 
-CRP (row, col)
-int	*row, *col;
+int CRP(int *row, int *col)
 {
 	char	*sa, *sd;
 	int	c;
@@ -378,7 +375,7 @@ top:
 		if (*sa == MARKER) {			
 			sa += 2;	
 
-			while (c = CRI ()) {
+			while ((c = CRI ())) {
 				if (c == ESC)
 					goto top;
 				Back[Back_count++] = c;
@@ -412,9 +409,7 @@ top:
 
 
 
-unget_inkey2 (s, n)
-wchar16_t *s;
-int	n;
+void unget_inkey2(wchar16_t *s, int n)
 {
 	extern wchar16_t	ibuf[];
 	extern int	buf_count;
@@ -426,8 +421,7 @@ int	n;
 	}
 }
 
-unget_key (c)
-int	c;
+void unget_key(int c)
 {
 	wchar16_t tmp[2];
 
@@ -437,7 +431,7 @@ int	c;
 
 
 
-CRI ()
+wchar16_t CRI(void)
 {
 	wchar16_t	c;
 
@@ -447,14 +441,13 @@ CRI ()
 
 
 
-Clear_EOL ()
+void Clear_EOL(void)
 {
 	reverse_out();
 	tputs(CE, 1, outc);
 }
 
-StartGuide (row, col)
-unsigned short	*row, *col;
+void StartGuide(unsigned short *row, unsigned short *col)
 {
 	Conversion	*cv;
 
@@ -470,8 +463,7 @@ unsigned short	*row, *col;
 	Flush ();
 }
 
-EndGuide (row, col)
-unsigned short	row, col;
+void EndGuide(unsigned short row, unsigned short col)
 {
 	if (status_line) {
 		tputs (FS, 1, outc);
@@ -483,12 +475,12 @@ unsigned short	row, col;
 	master_flush_flag = 1;
 }
 
-Flush ()
+void Flush(void)
 {
 	fflush (stdout);
 }
 
-Cscroll ()
+int Cscroll(void)
 {
 	
 	return (1);
