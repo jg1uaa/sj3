@@ -46,11 +46,13 @@
 #include "sjtool.h"
 #include "sj3dic.h"
 #include "sj3lib.h"
-#include "Funcs.h"
 
 struct wordent {
 	char	word_str[MAXWORD];
-	};
+};
+#define WORDENT_DEFINED
+
+#include "sj3.h"
 
 extern char	home_dir[];
 extern char	term_name[];
@@ -62,11 +64,6 @@ static char	*rcfile = ".sjrc";
 
 static int	user_euc = 0;
 static int	file_code = SYS_SJIS;	
-
-/* sjrc.c */
-int getword(char *, struct wordent[]);
-void set_dict(struct wordent[]);
-void set_server(struct wordent[]);
 
 struct functbl {
 	char *keyword;
@@ -80,7 +77,7 @@ struct functbl {
 
 #define TOLOWER(c) (isupper(c) ? tolower(c) : (c))	
 
-int sjset_code (void)
+static int sjset_code(void)
 {
 	char *loc;
 
@@ -113,7 +110,7 @@ int sjset_code (void)
 }
 	
 
-int getsjrc (void)
+int getsjrc(void)
 {
 	FILE *fd;
 	char *p;
@@ -147,7 +144,7 @@ int getsjrc (void)
 }
 
 
-void setrc (char *file, FILE *fd)
+void setrc(char *file, FILE *fd)
 {
 	char		line[MAXLINE];
 	int	w;
@@ -187,7 +184,7 @@ int much(char *s1, char *s2)
 }
 
 
-int getword (char *s, struct wordent word[])
+int getword(char *s, struct wordent word[])
 {
 	unsigned char	c, cc;
 	char *p;
@@ -274,27 +271,27 @@ int getword (char *s, struct wordent word[])
 	return wcount;
 }
 
-int IsTerminator (unsigned char c)
+int IsTerminator(unsigned char c)
 {
 	return (c == '\n') ? 1 : 0;
 }
 
-int isTerminator (unsigned char c)
+int isTerminator(unsigned char c)
 {
 	return (c == '#') ? 1 : 0;
 }
 
-int IsEscape (unsigned char c)
+int IsEscape(unsigned char c)
 {
 	return (c == '\\') ? 1 : 0;
 }
 
-int IsDelimitor (unsigned char c)
+int IsDelimitor(unsigned char c)
 {
 	return (c == ' ' || c == '\t' || c == '.') ? 1 : 0;
 }
 
-void set_dict (struct wordent word[])
+void set_dict(struct wordent word[])
 {
 	setdicname(word[1].word_str);
 }
