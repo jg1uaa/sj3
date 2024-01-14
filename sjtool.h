@@ -52,8 +52,10 @@
 #	define	SYS_EUC		1
 #endif
 
+#ifndef FALSE
 #define	TRUE		-1
 #define	FALSE		!(TRUE)
+#endif
 
 #define	EXEC_TEXT	1
 #define	EXEC_DICT	2
