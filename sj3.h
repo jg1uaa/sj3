@@ -36,20 +36,14 @@
 
 #include <stdio.h>
 #include <stdarg.h>
-#include "sj_struct.h"
+#include "sj3priv.h"
 
-#ifndef _WCHARH // "wchar16.h" not included
-typedef unsigned short wchar16_t;
-#endif
 #if !defined(SJ3_SJ2_H_) && !defined(WORDENT_DEFINED) // "sj2.h" not included
 #include "sjtool.h"
 struct wordent {
 	wchar16_t word_str[MAXWORD];
 };
 #endif
-
-/* cmpstr.c */
-int cmpstr(unsigned char *, unsigned char *);
 
 /* code.c */
 void codeconv(wchar16_t, unsigned int *);
@@ -96,7 +90,7 @@ void get_buf(void);
 int get_byte(void);
 int get_word(void);
 int get_nstring(unsigned char *, int);
-unsigned char get_ndata(unsigned char *, int);
+void *get_ndata(void *, int);
 
 /* conv.c */
 void convert_stat(void);
@@ -213,10 +207,6 @@ void clear_etckeys(void);
 int set_etckeys(struct wordent[]);
 wchar16_t parse_command(wchar16_t *s, int *count);
 
-/* fuzoku.c */
-void setclrec(JREC *, unsigned char *, TypeCnct);
-void srchfzk(JREC *, unsigned char *, TypeCnct, int);
-
 /* henkan.c */
 void exec_henkan(void);
 void addBun(int, int);
@@ -242,11 +232,6 @@ void Btop(void);
 /* hinsi.c */
 char *hns2str(int);
 int str2hns(char *);
-
-/* init.c */
-void seg_count(DICT *);
-void mkidxtbl(DICT *);
-void initwork(void);
 
 /* kigou.c */
 int kigou(void);
@@ -275,61 +260,6 @@ void SJ2_henkan_end(void);
 int SJ2_henkan_init(void);
 int sj3_autocon(void);
 
-/* main.c */
-int make_lockfile(void);
-int erase_lockfile(void);
-void server_terminate(void);
-
-/* memory2.c */
-JREC *free_jlst(JREC *);
-CLREC *free_clst(CLREC *, int);
-void free_clall(CLREC *);
-void free_jall(JREC *);
-void freework(void);
-
-/* mk2claus.c */
-void mk2claus(void);
-
-/* mkbunset.c */
-void mkbunsetu(void);
-CLREC *argclrec(int);
-
-/* mvmemd.c */
-void mvmemd(unsigned char *, unsigned char *, int);
-
-/* mvmemi.c */
-void mvmemi(unsigned char *, unsigned char *, int);
-
-/* rk_conv.c */
-void sj3_rkcode(int);
-int sj3_rkinit2(char *, int);
-int rcode_sjis_init(void);
-int rcode_euc_init(void);
-int sj3_rkinit(char *);
-int sj3_rkinit_euc(char *);
-int sj3_rkinit_mb(char *);
-int sj3_rkinit_sub(char *, int(*)(void));
-char *getkey(char *, wchar16_t *, int *);
-char *rkgetyomi(char *, wchar16_t *, int *);
-void cltable(void);
-int chk_rstr(wchar16_t *, wchar16_t *, int, int);
-#ifdef SJ3_RK_H_ // "rk.h" included
-RkTablW16 *rkalloc(void);
-RkTablW16 *mktable(wchar16_t *, int);
-#endif
-int stradd(wchar16_t **, wchar16_t *, int);
-int kstradd(wchar16_t **, wchar16_t *, int);
-void sj3_rkebell(int);
-void sj3_rkclear(void);
-void sj3_rkreset(void);
-void sj3_rkconvc(wchar16_t, unsigned int *);
-int sj3_rkconv2(wchar16_t *, unsigned int *, int);
-int sj3_rkconv(unsigned char *, unsigned char *);
-int sj3_rkconv_euc(unsigned char *, unsigned char *);
-int sj3_rkconv_mb(unsigned char *, unsigned char *);
-int sj3_rkconv_w16(wchar16_t *, wchar16_t *);
-int rkmatch(wchar16_t *, wchar16_t *, int);
-
 /* romaji.c */
 int exec_romaji(wchar16_t);
 void move_cur(int);
@@ -341,9 +271,6 @@ int sj_rkconv2(wchar16_t *, wchar16_t *, unsigned short *, int);
 int sj_rkconv(wchar16_t *, wchar16_t *, int);
 int sj_rkconv2(wchar16_t *, wchar16_t *, unsigned short *, int);
 int exec_romaji2(wchar16_t, wchar16_t *, wchar16_t *, unsigned short *, int, int);
-
-/* selclrec.c */
-void selclrec(void);
 
 /* screen.c */
 void vbackchar(int);
@@ -374,17 +301,10 @@ void disp_mode(void);
 void TopGuide(void);
 void guide_print(wchar16_t *, wchar16_t *);
 
-/* sj2code.c */
-int sj2cd_chr(unsigned char *, unsigned char *);
-int sj2cd_str(unsigned char *, unsigned char *, int);
-
 /* sj3.c */
 int main(int argc, char **argv);
 void makecore(int);
 void init(char **argv);
-void init_env(void);
-void parsearg(int argc, char **argv);
-void usage(void);
 void sjinit(void);
 void setshellname(void);
 void getfixtty(void);
@@ -413,27 +333,6 @@ char *chmyhname(char *hname);
 
 /* sj3ver.c */
 void print_version(void);
-
-/* sj3_rkcv.c */
-void setl_hktozh(void);
-void mkkigou(void);
-unsigned short sj_addten(unsigned short, unsigned short);
-unsigned short sj_han2zen(unsigned short);
-int sj3_hantozen(unsigned char *, unsigned char *);
-int sj3_hantozen_euc(unsigned char *, unsigned char *);
-int sj3_hantozen_mb(unsigned char *, unsigned char *);
-int sj3_hantozen_w16(wchar16_t *, wchar16_t *);
-int sj_hantozen(wchar16_t *, wchar16_t *, int);
-unsigned short sj_zen2han(unsigned short);
-int sj3_zentohan(unsigned char *, unsigned char *);
-int sj3_zentohan_euc(unsigned char *, unsigned char *);
-int sj3_zentohan_mb(unsigned char *, unsigned char *);
-int sj3_zentohan_w16(wchar16_t *, wchar16_t *);
-int sj_zentohan(wchar16_t *, wchar16_t *, int);
-wchar16_t sj_tokata(wchar16_t);
-wchar16_t sj_tohira(wchar16_t);
-void sj_htok(wchar16_t *, wchar16_t *);
-void sj_ktoh(wchar16_t *, wchar16_t *);
 
 /* sjgetchar.c */
 wchar16_t SJ_getchar(void);
@@ -542,9 +441,6 @@ int AnotherConversion(void);
 /* term.c */
 void set_news(void);
 
-/* terminat.c */
-int terminate(TypeCnct, unsigned char *);
-
 /* toroku.c */
 int exec_toroku(void);
 int getyomi(wchar16_t *, int, wchar16_t *, wchar16_t *);
@@ -553,24 +449,6 @@ int getcheck(wchar16_t *, wchar16_t *, wchar16_t *, wchar16_t *);
 int getkstr(wchar16_t *, int, wchar16_t *);
 int getbunsetu(wchar16_t *, wchar16_t *);
 int exec_syoukyo(void);
-
-/* wc16_str.c */
-int sj3_iswcntrl16(wchar16_t);
-int sj3_iswupper16(wchar16_t);
-int sj3_iswdigit16(wchar16_t);
-int sj3_iswxdigit16(wchar16_t);
-int sj3_wslen16(wchar16_t *);
-int sj3_wscmp16(wchar16_t *, wchar16_t *);
-int sj3_wsncmp16(wchar16_t *, wchar16_t *, int);
-wchar16_t *sj3_wscpy16(wchar16_t *, wchar16_t *);
-wchar16_t *sj3_wsncpy16(wchar16_t *, wchar16_t *, int);
-wchar16_t *sj3_wscat16(wchar16_t *, wchar16_t *);
-wchar16_t sj3_euc2wc16(unsigned int);
-wchar16_t sj3_sjis2wc16(unsigned int);
-unsigned int sj3_wc2euc16(wchar16_t);
-unsigned int sj3_wc2sjis16(wchar16_t);
-int sj3_mbstowcs16(wchar16_t *, unsigned char *, int);
-int sj3_wcstombs16(unsigned char *, wchar16_t *, int);
 
 #endif /* _SJ3_H_ */
 
