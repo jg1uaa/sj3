@@ -82,8 +82,8 @@ fi
 AR=`printf "all:\\n\\t@echo \\\$(AR)\\n" | make ${MAKE_FLAGS} -sf -`
 CC=`printf "all:\\n\\t@echo \\\$(CC)\\n" | make ${MAKE_FLAGS} -sf -`
 CFLAGS=`printf "all:\\n\\t@echo \\\$(CFLAGS)\\n" | make ${MAKE_FLAGS} -sf -`
-CFLAGS="${CFLAGS} -g -Wall -Wextra -Wno-unused-parameter"
-LDLIBS=
+CFLAGS="${CFLAGS} -g -Wall -Wno-pointer-sign -Wno-unused-parameter"
+LDLIBS="${LDLIBS} -lutil"
 LDADD=
 LDADD_B64_NTOP=
 LDADD_CRYPT=
