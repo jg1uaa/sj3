@@ -42,7 +42,7 @@
 #include "kanakan.h"
 #include "Funcs.h"
 
-void wakachi (void)
+void wakachi(void)
 {
 	JREC		*jrec;
 	CLREC		*clrec;
@@ -129,4 +129,3 @@ void wakachi (void)
 		}
 	}
 }
-
