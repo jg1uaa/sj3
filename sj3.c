@@ -62,6 +62,10 @@
 #include "common.h"
 #include "sj3.h"
 
+static void init_env(void);
+static void parsearg(int argc, char **argv);
+static void usage(void);
+
 #ifndef _PATH_UTMP
 #define _PATH_UTMP "/var/run/utmp"
 #endif
@@ -169,7 +173,7 @@ void init(char** argv)
 }
 
 
-void init_env(void)
+static void init_env(void)
 {
 	char *uname, *hp, *tname;
         int  i;
@@ -215,7 +219,7 @@ void init_env(void)
 }
 
 
-void parsearg(int argc, char** argv)
+static void parsearg(int argc, char** argv)
 {
 	int	ap;
 	char	c;
@@ -294,7 +298,7 @@ void parsearg(int argc, char** argv)
 }
 
 
-void usage(void)
+static void usage(void)
 {
 	aprintf ("Usage: %s [-option ...]\n\r", progname);
 	aprintf ("\t-option\n\r");
