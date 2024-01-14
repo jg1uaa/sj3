@@ -41,7 +41,7 @@
 #include "sj_euc.h"
 #include "sj_kcnv.h"
 #include "kanakan.h"
-#include "Funcs.h"
+#include "sj3priv.h"
 
 static unsigned int checkdict(unsigned char* kanji, TypeGram grm);
 static int cal_nextym(unsigned char* ptr);

@@ -45,7 +45,7 @@
 #include "sj3lib.h"
 #include "sjtool.h"
 #include "server.h"
-#include "Funcs.h"
+#include "sj3.h"
 
 #define	IsEOL(c)	((c) == '\0')
 #define	IsBlank(c)	((c) == ' ' || (c) == '\t')

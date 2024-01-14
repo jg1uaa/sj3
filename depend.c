@@ -47,7 +47,7 @@
 #include "Dict.h"
 #include "sj3err.h"
 #include "kanakan.h"
-#include "Funcs.h"
+#include "sj3priv.h"
 
 
 #if defined(__FD_SET) && !defined(FD_SET)

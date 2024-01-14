@@ -50,7 +50,7 @@ static char rcsid[] = "$Header: /export/work/contrib/sj3/sj3rkcv/RCS/rk_conv.c,v
 #include "kctype.h"
 #include "rk.h"
 #include "sj3lib.h"
-#include "Funcs.h"
+#include "sj3priv.h"
 
 #if defined(__sony_news) && defined(SVR4)
 #define wscmp sj3_wscmp16

@@ -51,7 +51,7 @@
 #include "server.h"
 #include "kanakan.h"
 #include "sj3lib.h"
-#include "Funcs.h"
+#include "sj3priv.h"
 
 
 #define SJIS_PROTO 1

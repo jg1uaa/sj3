@@ -49,7 +49,7 @@
 #include "sj3lib.h"
 #include "sj3dic.h"
 #include "server.h"
-#include "Funcs.h"
+#include "sj3.h"
 
 static void _open_error(int err);
 static void _close_error(int err);

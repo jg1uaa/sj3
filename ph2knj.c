@@ -40,7 +40,7 @@
 #include "sj_kcnv.h"
 #include "sj_yomi.h"
 #include "kanakan.h"
-#include "Funcs.h"
+#include "sj3priv.h"
 
 int ph2knj(unsigned char *zyomi, unsigned char *kanji, int knjlen)
 {

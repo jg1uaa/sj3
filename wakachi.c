@@ -40,7 +40,7 @@
 #include "sj_right.h"
 #include "sj_hinsi.h"
 #include "kanakan.h"
-#include "Funcs.h"
+#include "sj3priv.h"
 
 void wakachi(void)
 {

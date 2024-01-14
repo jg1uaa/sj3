@@ -41,7 +41,7 @@
 #include "rk.h"
 #include "kctype.h"
 #include "sj3lib.h"
-#include "Funcs.h"
+#include "sj3priv.h"
 
 #if defined(__sony_news) && (SVR4)
 #define wscmp sj3_wscmp16

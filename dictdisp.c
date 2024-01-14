@@ -41,7 +41,7 @@
 #include <ctype.h>
 #include "server.h"
 #include "sj3lib.h"
-#include "Funcs.h"
+#include "sj3.h"
 
 void dictdisp(char *output)
 {
