@@ -34,10 +34,6 @@
  */
 
 
-#include "sj_sysvdef.h"
-#ifdef SVR4
-#include <sys/euc.h>
-#endif
 #include <string.h>
 #include "wchar16.h"
 #include <locale.h>
