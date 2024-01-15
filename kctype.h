@@ -35,7 +35,6 @@
 
 
 
-#if !defined(__sony_news) || (defined(__sony_news) && !defined(SVR4))
 #ifndef __KCTYPE
 #define __KCTYPE
 
@@ -111,5 +110,3 @@
 #endif
 #define iskana    iskana2
 #endif
-#endif
-
