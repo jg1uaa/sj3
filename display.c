@@ -35,7 +35,6 @@
 
 
 
-#include "sj_sysvdef.h"
 #include <errno.h>
 #include "common.h"
 #include "inkey.h"
@@ -128,23 +127,10 @@ void checkterm(void)
 		TS = tgetstr ("ts", &area);  
 		FS = tgetstr ("fs", &area);
 		DS = tgetstr ("ds", &area);
-#ifdef SVR4
-		I2 = tgetstr ("i1", &area);
-#else
 		I2 = tgetstr ("i2", &area);
-#endif
 	} else {
 		status_line = 0;
 	}
-#ifdef SVR4
-	
-
-	if (strstr(term_name, "news") != NULL) {
-		keyboard = NEWS_KB;
-		set_news();
-	} else
-		keyboard = OTHER_KB;
-#else 
 
 	kb = tgetstr ("KB", &area);
 	if (kb == (char *)NULL || *kb == '\0')
@@ -154,7 +140,6 @@ void checkterm(void)
 		set_news();
 	} else
 		keyboard = OTHER_KB;
-#endif 
 
 	strcpy (cmove, CM);
 }
