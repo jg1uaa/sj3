@@ -36,20 +36,13 @@
 
 
 #ifndef _SJ_EUC
-
 #define _SJ_EUC
 
-#include "sj_sysvdef.h"
-
-#ifdef SVR4
-#include <sys/euc.h>
-#else  
 #ifndef SS2
 #define SS2 0x8e
 #endif
 #ifndef SS3
 #define SS3 0x8f
 #endif
-#endif  
 
 #endif  
