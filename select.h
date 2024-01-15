@@ -38,8 +38,6 @@
 #include <sys/param.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#ifdef SVR4
 #include <sys/select.h>
-#endif
 
 typedef fd_set	SELECT_FD;
