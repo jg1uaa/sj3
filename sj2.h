@@ -32,21 +32,12 @@
 
 #include "wchar16.h"
 
-#include "sj_sysvdef.h"
 #include <stdio.h>
 #include <signal.h>
 #include <ctype.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#ifdef SVR4
-#ifdef __sony_news
-#include "/usr/include/sys/ioctl.h"
-#endif
-#include <sys/ttold.h>
-#include <sys/termio.h>
-#else
 #include <sys/ioctl.h>
-#endif
 #include <sys/wait.h>
 #include <sys/time.h>
 #include <sys/param.h>
@@ -56,19 +47,7 @@
 
 
 #include <pwd.h>
-#ifdef SVR4
-#include <sac.h>
-#include <utmpx.h>
-#else
 #include <utmp.h>
-#endif
-#if defined(__sony_news) && defined(SVR4)
-#include <jctype.h>
-#endif
-
-#if defined(BSD4_3) || defined(SVR4)
-#define BSD43
-#endif 
 
 #ifdef __sony_news
 #ifdef KM_EUC		
