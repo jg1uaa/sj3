@@ -40,7 +40,6 @@
 #include <string.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include "sj_sysvdef.h"
 #include "sj_kcnv.h"
 #include <sys/socket.h>
 #include <sys/un.h>
@@ -51,15 +50,6 @@
 #include <errno.h>
 #include "server.h"
 #include "kanakan.h"
-#ifdef SVR4
-#include <sys/filio.h>
-#include <sys/signal.h>
-#include <poll.h>
-#endif
-
-#ifdef SVR4
-#define signal sigset
-#endif
 
 #if defined(__FD_SET) && !defined(FD_SET)
 # define FD_SET __FD_SET
@@ -77,11 +67,7 @@ Client	*client = NULL;
 Client  *cur_client;
 
 int	maxfds = 0;		
-#ifdef SVR4
-struct pollfd poll_fds[_NFILE];
-#else
 fd_set	fds_org = { 0 };	
-#endif
 jmp_buf	client_dead;
 int	client_fd;
 
@@ -102,17 +88,7 @@ static	int	getpos = 0;
 
 void socket_init(void)
 {
-#ifdef SVR4
-	int i;
-	
-	for (i = 0; i < _NFILE; i++) {
-		poll_fds[i].fd = -1;
-		poll_fds[i].events = 0;
-		poll_fds[i].revents = 0;
-	}
-#else
 	FD_ZERO(&fds_org);
-#endif
 	client_num = 0;
 	maxfds = 0;
 }
@@ -121,38 +97,14 @@ void socket_init(void)
 
 static void set_fd(int fd)
 {
-#ifdef SVR4
-        poll_fds[maxfds].fd = fd;
-        poll_fds[maxfds].events = POLLIN;
-	maxfds++;
-#else
 	FD_SET(fd, &fds_org);
 	if (fd >= maxfds) maxfds = fd + 1;
-#endif
 }
 
 
 
 static void clr_fd(int fd)
 {
-#ifdef SVR4
-	int i, j;
-
-	for (i = 0; i < maxfds; i++) {
-		if (poll_fds[i].fd == fd) {
-			maxfds--;
-			for (j = i; j < maxfds; j++) {
-				poll_fds[j].fd = poll_fds[j+1].fd;
-				poll_fds[j].events = poll_fds[j+1].events;
-				poll_fds[j].revents = poll_fds[j+1].revents; 
-			}
-			poll_fds[j].fd = -1;
-			poll_fds[j].events = 0;
-			poll_fds[j].revents = 0;
-			break;
-		}
-	}
-#else
 	FD_CLR(fd, &fds_org);
 	if (maxfds == fd + 1) {
 		while (--fd >= 0) {
@@ -160,7 +112,6 @@ static void clr_fd(int fd)
 		}
 		maxfds = fd + 1;
 	}
-#endif
 }
 
 
@@ -335,41 +286,17 @@ void close_socket(void)
 
 
 
-#ifdef SVR4
-static void connect_client(struct pollfd *readfds)
-#else
 static void connect_client(fd_set *readfds)
-#endif
 {
 	int	fd;
 	Client   *client_tmp;
 
-#ifdef SVR4
-	int     i;
-
-	for (i = 0; i < maxfds; i++) {
-		if ((readfds[i].fd == fd_inet) && 
-		    (readfds[i].revents == POLLIN)) {
-			fd = connect_af_inet();
-			readfds[i].revents = 0;
-			break;
-		}
-		if ((readfds[i].fd == fd_unix) &&
-		    (readfds[i].revents == POLLIN)) {
-			fd = connect_af_unix();
-			readfds[i].revents = 0;
-			break;
-		}
-	}
-	if (i == maxfds) return;
-#else /* SVR4 */
 	if (FD_ISSET(fd_inet, readfds))
 		fd = connect_af_inet();
 	else if (FD_ISSET(fd_unix, readfds))
 		fd = connect_af_unix();
 	else
 		return;
-#endif /* SVR4 */
 	if (fd == ERROR) return;
 
 	
@@ -451,15 +378,6 @@ void communicate(void)
 	signal(SIGPIPE, SIG_IGN);
         
 	for ( ; ; ) {
-#ifdef SVR4
-		int i;
-
-		while(poll(poll_fds, maxfds, -1) == ERROR) { 
-			if (errno != EINTR) error_out("poll");
-			errno = 0;
-		}
-#else
-
 		fd_set	readfds;
 
 		
@@ -468,7 +386,6 @@ void communicate(void)
 			if (errno != EINTR) error_out("select");
 			errno = 0;
 		}
-#endif
 		
 		for (cur_client = client ; cur_client; ) {
 
@@ -476,21 +393,6 @@ void communicate(void)
 				cur_client = disconnect_client(cur_client);
 				continue;
 			}
-#ifdef SVR4
-			for ( i = 0; i < maxfds; i++) {
-				if ((poll_fds[i].fd == cur_client->fd) &&
-				    (poll_fds[i].revents == POLLIN)) {
-				          poll_fds[i].revents = 0;
-					  client_fd = cur_client->fd;
-					  putpos = buflen = getpos = 0;
-					  execute_cmd();
-					  break;
-				 }
-			}
-			cur_client = cur_client->next;
-		}
-		connect_client(poll_fds);
-#else
 			if (FD_ISSET(cur_client->fd, &readfds)) {
 				client_fd = cur_client->fd;
 				putpos = buflen = getpos = 0;
@@ -499,7 +401,6 @@ void communicate(void)
 			cur_client = cur_client->next;
 		}
 		connect_client(&readfds);
-#endif
 	}
 }
 
