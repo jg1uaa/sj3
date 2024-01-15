@@ -34,14 +34,10 @@
  */
 
 
-#include "sj_sysvdef.h"
 #include <stdio.h>
 #include <locale.h>
 #include "sj_euc.h"
 #include "wchar16.h"
-#if defined(__sony_news) && defined(SVR4)
-#include <sonyils.h>
-#endif
 #include "sj3lib.h"
 
 #define MSB 0x80
