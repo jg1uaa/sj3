@@ -39,19 +39,9 @@
 #define _WCHARH
 
 
-#if defined(__sony_news) && defined(SVR4)
-#define _WCHAR_T
-typedef unsigned short  wchar_t;
-#include <stdlib.h>
-#include <ctype.h>
-#include <widec.h>
-#include <wctype.h>
-typedef wchar_t  wchar16_t;
-#else
 #include <stdlib.h>
 #include <ctype.h>
 typedef unsigned short  wchar16_t;
-#endif
 #include "key.h"
 
 #ifndef SS2
@@ -59,7 +49,6 @@ typedef unsigned short  wchar16_t;
 #define SS3 0x8f
 #endif
 
-#if !defined(__sony_news) || (defined(__sony_news) && !defined(SVR4))
 
 #ifdef iswcntrl
 #undef iswcntrl
@@ -109,7 +98,6 @@ typedef unsigned short  wchar16_t;
 #undef wcstombs
 #endif
 #define wcstombs(ws, mb, n)  sj3_wcstombs16(ws, mb, n)
-#endif
 
 
 #define LC_CTYPE_SHIFTJIS 1
