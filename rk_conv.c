@@ -39,28 +39,15 @@ static char rcsid[] = "$Header: /export/work/contrib/sj3/sj3rkcv/RCS/rk_conv.c,v
 #endif
 
 
-#include "sj_sysvdef.h"
 #include "wchar16.h"
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
-#ifdef __sony_news
-#include <jctype.h>
-#endif
 #include "kctype.h"
 #include "rk.h"
 #include "sj3lib.h"
 #include "sj3priv.h"
 
-#if defined(__sony_news) && defined(SVR4)
-#define wscmp sj3_wscmp16
-#define wsncmp sj3_wsncmp16
-#define wsncpy sj3_wsncpy16
-#define wscpy sj3_wscpy16
-#define wslen sj3_wslen16
-#define mbstowcs sj3_mbstowcs16
-#define wcstombs sj3_wcstombs16
-#endif
 
 extern int current_locale;
 
