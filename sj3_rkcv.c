@@ -43,15 +43,6 @@
 #include "sj3lib.h"
 #include "sj3priv.h"
 
-#if defined(__sony_news) && (SVR4)
-#define wscmp sj3_wscmp16
-#define wsncmp sj3_wsncmp16
-#define wsncpy sj3_wsncpy16
-#define wscpy sj3_wscpy16
-#define wslen sj3_wslen16
-#define mbstowcs sj3_mbstowcs16
-#define wcstombs sj3_wcstombs16
-#endif 
 
 extern int current_locale;
 
