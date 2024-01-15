@@ -35,12 +35,8 @@
 
 
 
-#include "sj_sysvdef.h"
 #include "wchar16.h"
 #include "kctype.h"
-#if defined(__sony_news) && defined(SVR4)
-#include "jctype.h"
-#endif
 #include "sj2.h"
 #include "key.h"
 #include "rk.h"
