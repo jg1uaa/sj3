@@ -35,11 +35,9 @@
 
 
 
-#ifndef __sony_news
 #ifndef __SJCTYPE
 #define __SJCTYPE
 
-#include "sj_sysvdef.h"
 #define sjis2euc        sj3_sjis2euc
 #define jis2sjis        sj3_jis2sjis
 #define euctosjis       sj3_euctosjis
@@ -73,10 +71,3 @@
 #define iskanji2  issjis2
 #define iskana    iskana2
 #endif
-#else
-#ifndef SVR4
-#define euctosjis       sj3_euctosjis
-#define sjistoeuc       sj3_sjistoeuc
-#endif 
-#endif 
-
