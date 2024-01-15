@@ -30,8 +30,6 @@
 
 #include "config.h"
 
-#include "sj_sysvdef.h"
-
 #include <sys/file.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>

@@ -36,8 +36,6 @@
  */
 
 
-/* #include "sj_sysvdef.h" */ /* XXX: no more need it? */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
