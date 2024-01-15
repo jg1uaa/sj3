@@ -603,16 +603,7 @@ void shellprocess(void)
 	SCPYN(Utmp.ut_line, strrchr (slave_name, '/') + 1);
 	time (&Utmp.ut_time);
 
-	if (setsid() < 0) {
-		perror("setsid()");
-	} else {
-		int t = open ("/dev/tty", O_RDWR);
-		if (t >= 0) {
-			ioctl (t, TIOCNOTTY, (char *)0);
-			(void) close(t);
-		}
-	}
-
+	setsid ();
 	getslave ();
 #endif /* __linux__ */
 
