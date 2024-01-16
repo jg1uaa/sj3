@@ -70,6 +70,10 @@ static void usage(void);
 #define _PATH_UTMP "/var/run/utmp"
 #endif
 
+#ifndef IUCLC
+#define IUCLC 0
+#endif
+
 #define DEFAULTSHELL	"/bin/sh"
 
 int	Lflag = 0;		
