@@ -81,8 +81,8 @@ static int sjset_code(void)
 {
 	char *loc;
 
-#ifdef LACKOF_SETLOCALE 
-        loc = getenv("LANG");
+#if defined(__NetBSD__)
+	loc = getenv("LANG");
 #else
 	loc = setlocale(LC_CTYPE, "");
 #endif

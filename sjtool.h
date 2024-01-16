@@ -36,10 +36,6 @@
 #ifndef SJ3_SJTOOL_H_
 #define SJ3_SJTOOL_H_
 
-#if defined(__NetBSD__)
-#define LACKOF_SETLOCALE
-#endif
-
 #define	LONGLENGTH	256
 #define	MAXLINE		256
 #define	MAXWORD		256

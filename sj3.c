@@ -398,8 +398,11 @@ void set_jmode(void)
 {
 	char *loc;
 
+#if defined(__NetBSD__)
+	loc = getenv("LANG");
+#else
 	loc = setlocale(LC_CTYPE, "");
-
+#endif
 	if (!loc) {
 		aprintf("error: bad locale\n");
 		fflush(stdout);
