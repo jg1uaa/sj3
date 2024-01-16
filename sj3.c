@@ -571,9 +571,6 @@ void shellprocess(void)
 #if defined(__linux__)
 	struct utmp Utmp;
 	
-	setsid();
-	getslave ();
-
 	memset ((char *) &Utmp, '\0', sizeof (Utmp));
 	(void) strncpy(Utmp.ut_user, user_name, sizeof(Utmp.ut_user));
 	(void) strncpy(Utmp.ut_line, &slave_name[sizeof("/dev/")-1],
@@ -610,15 +607,12 @@ void shellprocess(void)
 	SCPYN(Utmp.ut_line, strrchr (slave_name, '/') + 1);
 	time (&Utmp.ut_time);
 
-	setsid ();
-	getslave ();
 #endif /* __linux__ */
 
+	getslave ();
+
 	(void) close (master);
-	dup2 (slave, 0);
-	dup2 (slave, 1);
-	dup2 (slave, 2);
-	(void) close (slave);
+	login_tty (slave);
 
 #if !defined(__linux__)
 	if (Ttyslot > 0 && (f = open (_PATH_UTMP, O_WRONLY)) >= 0) {
@@ -871,7 +865,7 @@ void onwinch(__attribute__((unused)) int a)
 
 		killpg (Pid_shell, SIGWINCH);
 
-		if (ioctl (master, TIOCGPGRP, &ttypgrp) == 0)
+		if ((ttypgrp = tcgetpgrp(master)) == 0)
 			killpg (ttypgrp, SIGWINCH);
 	}
 
