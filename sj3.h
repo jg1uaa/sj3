@@ -95,7 +95,7 @@ void *get_ndata(void *, int);
 /* conv.c */
 void convert_stat(void);
 void inputprocess(void);
-wchar16_t inkey(void);
+int inkey(void);
 int sequence(wchar16_t *, int *);
 int parse_escape(wchar16_t *, int *, int);
 wchar16_t write_pseq(int);

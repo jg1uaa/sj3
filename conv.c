@@ -139,7 +139,7 @@ int		buf_count = 0;
 int		pars_n;
 static int	escape = 0;
 
-wchar16_t inkey(void)
+int inkey(void)
 {
 	Conversion	*cv;
 	int	i, j;
