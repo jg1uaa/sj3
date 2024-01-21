@@ -160,7 +160,7 @@ void setrc(char *file, FILE *fd)
 		while (functp->keyword != NULL) {
 			if (much(p, functp->keyword)) {
 				if (functp->func) (*(functp->func))(word);
-				break;;
+				break;
 			}
 			functp++;
 		}
