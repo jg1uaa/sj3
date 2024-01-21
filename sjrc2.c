@@ -149,7 +149,6 @@ void sjrc_init(void)
 void getsjrc2(void)
 {
 	char *p;
-	char *getenv();
 
 	sjset_code();
 	mk_cvtkey(term_name);
@@ -185,7 +184,7 @@ int setrc2(char *file)
 	char		line[MAXLINE];
 	struct wordent	word[WORDN];
 	struct functbl *functp;
-	FILE *fd, *fopen();
+	FILE *fd;
 
 	if (vflag > 1)
 		aprintf ("sjrc file is %s\n", file);
@@ -201,7 +200,7 @@ int setrc2(char *file)
 		while (functp->keyword != NULL) {
 			if (match(p, functp->keyword)) {
 				(*(functp->func))(word);
-				break;;
+				break;
 			}
 			functp++;
 		}
@@ -216,7 +215,6 @@ void getsjrk(int erase)
 {
 	char *p;
 	int i;
-	char *getenv();
 	char RKfile[LONGLENGTH];
 
 	RKfile[0] = '\0';
