@@ -52,10 +52,14 @@
 #include <locale.h>
 #if defined(__linux__)
 #include <pty.h>
+#include <utmp.h> // need for login_tty()
+#include <utmpx.h>
 #elif defined(__FreeBSD__) || defined(__DragonFly__)
 #include <libutil.h>
+#include <utmpx.h>
 #elif defined(__NetBSD__) || defined(__OpenBSD__)
 #include <util.h>
+#include <utmp.h>
 #endif
 #include "wchar16.h"
 #include "select.h"
@@ -105,7 +109,7 @@ extern 	int 	status_line;
 struct	winsize	Ttysize;
 #define ts_lines ws_row
 #define ts_cols ws_col
-#if !defined(__linux__)
+#if defined(__NetBSD__) || defined(__OpenBSD__)
 int	Ttyslot;
 #endif
 int	master;
@@ -471,7 +475,7 @@ void setdev(void)
 		chown(slave_name, getuid(), getgid());
 	chmod(slave_name, 0620);
 
-#if !defined(__linux__)
+#if defined(__NetBSD__) || (__OpenBSD__)
 	Ttyslot = ttyslot();
 #endif
 
@@ -569,7 +573,8 @@ void sj3_setenv(char* ename, char* eval, char* buf)
 void shellprocess(void)
 {
 #if defined(__linux__)
-	struct utmp Utmp;
+	struct utmpx Utmp;
+	struct timeval tv;
 	
 	memset ((char *) &Utmp, '\0', sizeof (Utmp));
 	(void) strncpy(Utmp.ut_user, user_name, sizeof(Utmp.ut_user));
@@ -579,13 +584,15 @@ void shellprocess(void)
 	Utmp.ut_pid = (pid_t)getpid();
 	strncpy(Utmp.ut_id, &Utmp.ut_line[2], 4);
 	Utmp.ut_id[0] = 't';
-	Utmp.ut_time = time(0);
-	setutent();
-	getutid(&Utmp);
-	pututline(&Utmp);
-	endutent();
+	gettimeofday(&tv, NULL); // ut_tv may not be the same as struct timeval
+	Utmp.ut_tv.tv_sec = tv.tv_sec;
+	Utmp.ut_tv.tv_usec = tv.tv_usec;
+	setutxent();
+	getutxid(&Utmp);
+	pututxline(&Utmp);
+	endutxent();
 
-#else /* __linux__ */
+#elif defined(__NetBSD__) || defined(__OpenBSD__)
 	struct utmp		Utmp;
 	char		*p;
 	int		f;
@@ -607,20 +614,20 @@ void shellprocess(void)
 	SCPYN(Utmp.ut_line, strrchr (slave_name, '/') + 1);
 	time (&Utmp.ut_time);
 
-#endif /* __linux__ */
+#endif
 
 	getslave ();
 
 	(void) close (master);
 	login_tty (slave);
 
-#if !defined(__linux__)
+#if defined(__NetBSD__) || defined(__OpenBSD__)
 	if (Ttyslot > 0 && (f = open (_PATH_UTMP, O_WRONLY)) >= 0) {
 		lseek (f, (long) (Ttyslot * sizeof (Utmp)), 0);
 		write (f, (char *)&Utmp, sizeof (Utmp));
 		close (f);
 	}
-#endif /* __linux__ */
+#endif /* __NetBSD__ || __OpenBSD__ */
 
 	setgid (getgid ());
 	setuid (getuid ());
@@ -791,10 +798,11 @@ cont:
 	print_guide_line ();
 }
 
-#if defined(__linux__)
 void clearutmpentry(void)
 {
-	struct utmp             Utmp;
+#if defined(__linux__)
+	struct utmpx Utmp;
+	struct timeval tv;
 
 	memset ((char *) &Utmp, '\0', sizeof (Utmp));
 	(void) strncpy(Utmp.ut_user, user_name, sizeof(Utmp.ut_user));
@@ -804,15 +812,15 @@ void clearutmpentry(void)
 	Utmp.ut_pid = (pid_t)getpid();
 	strncpy(Utmp.ut_id, &Utmp.ut_line[2], 4);
 	Utmp.ut_id[0] = 't';
-	Utmp.ut_time = time(0);
-	setutent();
-	getutid(&Utmp);
-	pututline(&Utmp);
-	endutent();
-}
-#else /* __linux__ */
-void clearutmpentry(void)
-{
+	gettimeofday(&tv, NULL);
+	Utmp.ut_tv.tv_sec = tv.tv_sec;
+	Utmp.ut_tv.tv_usec = tv.tv_usec;
+	setutxent();
+	getutxid(&Utmp);
+	pututxline(&Utmp);
+	endutxent();
+
+#elif defined(__NetBSD__) || defined(__OpenBSD__)
 	int			f;
 	struct utmp		Utmp;
 
@@ -826,8 +834,8 @@ void clearutmpentry(void)
 		write (f, (char *)&Utmp, sizeof (Utmp));
 		close (f);
 	}
+#endif
 }
-#endif /* __linux__ */
 
 
 void onwinch(__attribute__((unused)) int a)

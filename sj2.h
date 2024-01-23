@@ -47,7 +47,6 @@
 
 
 #include <pwd.h>
-#include <utmp.h>
 
 #ifdef __sony_news
 #ifdef KM_EUC		
