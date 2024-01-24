@@ -40,7 +40,11 @@
 #include "inkey.h"
 #include "select.h"
 #include <string.h>
+#if defined(__DragonFly__)
+#include <ncurses.h>
+#else
 #include <curses.h>
+#endif
 #include <term.h>
 #include "sj3.h"
 

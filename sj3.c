@@ -572,7 +572,7 @@ void sj3_setenv(char* ename, char* eval, char* buf)
 
 void shellprocess(void)
 {
-#if defined(__linux__)
+#if defined(__linux__) || defined(__FreeBSD__) || defined(__DragonFly__)
 	struct utmpx Utmp;
 	struct timeval tv;
 	
@@ -800,7 +800,7 @@ cont:
 
 void clearutmpentry(void)
 {
-#if defined(__linux__)
+#if defined(__linux__) || defined(__FreeBSD__) || defined(__DragonFly__)
 	struct utmpx Utmp;
 	struct timeval tv;
 
