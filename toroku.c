@@ -272,7 +272,7 @@ int getkstr(wchar16_t *s, int lim, wchar16_t *guide)
 	wchar16_t			*p;
 	int			plen, chbun;
 
-	chbun = 0;
+	plen = chbun = 0;
 	cv = GetConversion ();
 	if (cv->Kanji != 0) {
 		if (cv->Bnum > 1) {
