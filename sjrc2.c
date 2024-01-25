@@ -114,8 +114,6 @@ extern struct valtbl mode_val[], code_val[];
 
 static void sjset_code(void)
 {
-	char *loc;
-
         if (current_locale == LC_CTYPE_EUC) {
 		locale_code = SJ3_EUC;
 		user_euc = 1;
