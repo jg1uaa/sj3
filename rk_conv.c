@@ -35,7 +35,7 @@
 
 
 #ifndef lint
-static char rcsid[] = "$Header: /export/work/contrib/sj3/sj3rkcv/RCS/rk_conv.c,v 1.14 1994/06/03 07:42:16 notanaka Exp $";
+static char rcsid[] __attribute__((unused)) = "$Header: /export/work/contrib/sj3/sj3rkcv/RCS/rk_conv.c,v 1.14 1994/06/03 07:42:16 notanaka Exp $";
 #endif
 
 
