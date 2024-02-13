@@ -215,7 +215,7 @@ int exec_romaji(wchar16_t c)
 void move_cur(int kval)
 {
 	Conversion *cv;
-	int i;
+	int i, n;
 
 	cv = GetConversion();
 	switch(kval) {
@@ -229,16 +229,12 @@ void move_cur(int kval)
 	case KEY_LEFT:
 		if ((i = cv->out_point) > 0) {
 			i--;
-			if (i > 0 && (WcIsZENKAKU(cv->out_buf[i])))
-				i--;
 			cv->out_point = i;
 		}
 		break;
 	case KEY_RIGHT:
 		if ((i = cv->out_point) < cv->out_epoint) {
 			i++;
-			if (i < cv->out_epoint && (WcIsZENKAKU(cv->out_buf[i])))
-				i++;
 			cv->out_point = i;
 			if (cv->out_point >= cv->out_epoint)
 				cv->ha_point = cv->ha_epoint;
@@ -246,7 +242,9 @@ void move_cur(int kval)
 		break;
 	}
 	if (cv->out_point != cv->Vlen) {
-		Cgoto(cv->out_point);
+		for (i = n = 0; i < cv->out_point; i++)
+			n += WcIsZENKAKU(cv->out_buf[i]) ? 2 : 1;
+		Cgoto(n);
 		if (cv->out_point == cv->out_epoint) {
 			os_point = 0;
 			hs_point = 0;
