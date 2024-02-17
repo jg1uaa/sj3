@@ -381,7 +381,8 @@ void init_funcs(void)
 	funcs[19].keyword = WCRkerrbell;        funcs[19].func = set_rkebell;
 	funcs[20].keyword = WCServer;           funcs[20].func = set_server;
 	funcs[21].keyword = WCDictionary;       funcs[21].func = set_dict;
-	funcs[22].keyword = NULL;               funcs[22].func = NULL;
+	funcs[22].keyword = WCBskey;            funcs[22].func = set_bskey;
+	funcs[23].keyword = NULL;               funcs[23].func = NULL;
 }
 
 struct valtbl mode_val[5];  

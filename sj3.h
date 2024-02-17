@@ -371,6 +371,7 @@ int isDelimitor(unsigned char); // -> sjrc.c
 void set_forkshell(struct wordent[]);
 void set_intr(struct wordent[]);
 void set_delkey(struct wordent[]);
+void set_bskey(struct wordent[]);
 int isintr(unsigned char);
 void set_goto(struct wordent[]);
 int IsGoto(unsigned char);
