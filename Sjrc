@@ -63,7 +63,6 @@
 #.key.toggle		^G
 #.key.reconnect		^R
 #.delkey		^D
-.bskey			^?
 
 #	文字種切り替えキーを押すと決定する
 #.FlushAfterConversion	on

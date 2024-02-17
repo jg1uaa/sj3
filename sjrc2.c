@@ -445,15 +445,6 @@ void set_delkey(struct wordent word[])
 			set_del (c);
 }
 
-void set_bskey(struct wordent word[])
-{
-	int	c;
-
-	if (word[1].word_str[0] != '\0')
-		if ((c = eval_key (word[1].word_str)) != -1)
-			set_bs (c);
-}
-
 int isintr(unsigned char c)
 {
 	if (c == intr_code)
