@@ -57,7 +57,7 @@ CLIENT_APPS   = sj3dic sj3mkdic sj3stat
 SJ3_OBJS      = code.o common.o conv.o display.o douon.o edit.o etc.o \
                 eucmessage.o funckey.o henkan.o kigou.o libif.o nmttyslot.o \
                 romaji.o screen.o sj3.o sj3ver.o sjgetchar.o sjrc2.o \
-                stat_conv.o term.o toroku.o version2.o
+                stat_conv.o term.o toroku.o utf8.o utf8_table.o version2.o
 SJ3DIC_OBJS   = codecnv.o dictdisp.o dictmake.o hinsi.o sj3dic.o sj3err.o \
                 sjrc.o
 SJ3MKDIC_OBJS = char.o cnvhinsi.o file.o global.o hindo.o knjcvt.o makedict.o \

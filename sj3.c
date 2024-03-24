@@ -123,6 +123,7 @@ void	(*sigpipe)(int);
 int Pid_shell;                  
 
 int current_locale; 
+int utf8_convert = 0;
 
 int main(int argc, char** argv)
 {
@@ -244,10 +245,6 @@ static void parsearg(int argc, char** argv)
 			case 'L':
 				Lflag ++;
 				break;
-			case 'E':
-				aprintf ("euc mode\n\r");
-				set_eucmode ();
-				break;
 			case 'V':
 				vflag = 0;
 				break;
@@ -320,7 +317,6 @@ static void usage(void)
         aprintf ("\t\t-H hostname... \tname list of server hosts\n\r");
 	if (vflag > 2) {
 		aprintf ("\t\t-v          \tverbose mode\n\r");
-		aprintf ("\t\t-E             \tEUC mode\n\r");
 	}
 	exit (1);
 }
@@ -421,7 +417,7 @@ void set_jmode(void)
 	} else if (strncmp(loc, "ja", 2) == 0 ||
 		   strncmp(loc, "Ja", 2) == 0) {
 		current_locale = LC_CTYPE_EUC;
-		set_eucmode();
+		utf8_convert = (strcasestr(loc, "UTF") != NULL);
 	} else {
 		aprintf("error: This locale will not use japanese.\n");
 		fflush(stdout);

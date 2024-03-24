@@ -48,18 +48,17 @@
 #include "sj2.h"
 #include "select.h"
 #include "sj3.h"
+#include "utf8.h"
 
 #if !defined(FREAD) && defined(O_RDONLY)
 #define		FREAD		(O_RDONLY+1)
 #define		FWRITE		(O_WRONLY+1)
 #endif
 
-#define       Isknj1(s)       ((eucmode) ? (iseuc(s) || (SS2 == (s))) : (issjis1(s)))
-#define       Isknj2(s)       ((eucmode) ? (SS3 == (s)) : 0)
-
 static wchar16_t  backup = (wchar16_t) 0;
 
-static int    eucmode = 0;
+extern int	current_locale;
+extern int	utf8_convert;
 extern int	master;
 
 wchar16_t SJ_getchar(void)
@@ -146,20 +145,17 @@ void output_master(void)
 	}
 }
 
-void set_eucmode(void)
-{
-       eucmode = 1;
-}
-
 int SJ_write(wchar16_t *s, int n)
 {
 	int	val;
 	wchar16_t wb[BUFFLENGTH];
-	unsigned char	buff[BUFFLENGTH * 3];
+	unsigned char	buff[BUFFLENGTH * 4];
 
 	wsncpy(wb, s, n);
 	wb[n] = 0;
-	val = wcstombs((char *) buff, wb, (size_t) n * 3);
+	val = utf8_convert ?
+		wcstoutf8((char *) buff, wb, (size_t) n * 4) :
+		wcstombs((char *) buff, wb, (size_t) n * 3);
 	if ((val == 0) && n) {
 		int i;
 		val = n;
@@ -171,32 +167,54 @@ int SJ_write(wchar16_t *s, int n)
 	return(val);
 }
 
+static int mbsize(unsigned char *c)
+{
+	if (utf8_convert) {
+		return utf8toucs_char(c, 0, NULL);
+	} else if (current_locale == LC_CTYPE_EUC) {
+		if (iseuc3byte(*c)) return 3;
+		else if (iseuc2byte(*c)) return 2;
+		else return 1;
+	} else {
+		if (issjis1(*c)) return 2;
+		else return 1;
+	}
+}
+
+static int mblength(unsigned char *s, int n, int *r)
+{
+	int i, p, q;
+
+	for (i = 0; i < n; i += p) {
+		p = mbsize(s + i);
+		q = n - i;
+		if (p > q) break;
+	}
+
+	if (r != NULL) *r = i;
+	return p - q;
+}
+
 void write_stdout(unsigned char *s, int n)
 {
-      static unsigned char knj1st = 0, knj2nd = 0;
+	static int remain = 0, len = 0;
+	static unsigned char buff[8];
+	int rsz;
 
-      while (n-- > 0) {
-              if (knj1st) {
-		      if (knj2nd) {
-			      putchar(knj2nd);
-			      putchar(knj1st);
-			      putchar(*s++);
-			      knj2nd = 0;
-			      knj1st = 0;
-		      } else {
-			      putchar(knj1st);
-			      putchar(*s++);
-			      knj1st = 0;
-		      }
-	      } else if (knj2nd) {
-		      knj1st = *s++;
-	      } else if (Isknj2(*s)) {
-		      knj2nd = *s++;
-	      } else if (Isknj1(*s))
-                      knj1st = *s++;
-              else
-                      putchar(*s++);
-      }
+	if (remain) {
+		memcpy(buff + len, s, rsz = (remain < n) ? remain : n);
+		remain -= rsz;
+		len += rsz;
+		if (!remain) fwrite(buff, len, 1, stdout);
+		s += rsz;
+		n -= rsz;
+	}
+
+	if (n <= 0) return;
+	remain = mblength(s, n, &rsz);
+	fwrite(s, rsz, 1, stdout);
+
+	if (remain) memcpy(buff, s + rsz, len = n - rsz);
 }
 
 
@@ -204,7 +222,7 @@ int SJ_read(wchar16_t *s, int n)
 {
 	unsigned char buff[BUFFLENGTH];
 	wchar16_t wcbuff[BUFFLENGTH];
-	int i, count, remain, c;
+	int i, count, remain;
 	size_t wnum;
 	extern int current_locale;
 
@@ -215,40 +233,15 @@ int SJ_read(wchar16_t *s, int n)
 	}
 	if ((count = read(STDIN, buff, n)) <= 0)
 	        return (count);
-	remain = 0;
-	for (i = 0; i < count; i++) {
-		c = buff[i];
-		if (current_locale == LC_CTYPE_EUC) {
-			if (iseuc3byte(c)) {
-				if (i + 2 >= count) {
-					if (i + 2 == count) {
-                                        remain = 1;
-                                        break;
-					} else
-                                        remain = 2;
-				} else
-                                i += 2;
-			} else if (iseuc2byte(c)) {
-				if (i + 1 >= count)
-				  remain = 1;
-				else
-				  i++;
-			}
-		} else {
-			if (issjis1(c)) {
-				if (i + 1 >= count)
-				  remain = 1;
-				else
-				  i++;
-			}
-		}
-	}
+	remain = mblength(buff, count, NULL);
 	if (remain) {
 		if ((i = read(STDIN, &buff[count], remain)) > 0)
 		        count += i;
 	}
 	buff[count] = 0;
-	wnum = mbstowcs((wchar16_t *) wcbuff, (char *) buff, count);
+	wnum = utf8_convert ?
+		utf8towcs((wchar16_t *) wcbuff, (char *) buff, count) :
+		mbstowcs((wchar16_t *) wcbuff, (char *) buff, count);
 	if ((wnum == 0) && count) {
 		wnum = count;
 		for ( i = 0; i <= count; i++)
@@ -268,10 +261,12 @@ void SJ_warnning(wchar16_t *s)
 
 void SJ_print(wchar16_t *s)
 {
-	unsigned char buff[BUFFLENGTH * 3];
+	unsigned char buff[BUFFLENGTH * 4];
 	size_t num;
 
-	num = wcstombs((char *) buff, s, (size_t ) (BUFFLENGTH * 3));
+	num = utf8_convert ?
+		wcstoutf8((char *) buff, s, (size_t ) (BUFFLENGTH * 4)) :
+		wcstombs((char *) buff, s, (size_t ) (BUFFLENGTH * 3));
 	if ((int) num > 0) 
 	  printf("%s", buff);
 }
