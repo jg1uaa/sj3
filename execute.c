@@ -1470,7 +1470,8 @@ void exec_dictpass(void)
 		if (dl -> dict -> dicid == dicid) break;
 	if (!dl) longjmp(error_ret, SJ3_NoSuchDict);
 
-	if (set_dictpass(dl -> dict, buf)) longjmp(error_ret, serv_errno);
+	if (set_dictpass((DictFile *)(dl -> dict), buf))
+		longjmp(error_ret, serv_errno);
 	put_int(SJ3_NormalEnd);
 }
 
@@ -1495,7 +1496,8 @@ void exec_dictcmnt(void)
 		if (dl -> dict -> dicid == dicid) break;
 	if (!dl) longjmp(error_ret, SJ3_NoSuchDict);
 
-	if (set_dictcmnt(dl -> dict, buf)) longjmp(error_ret, serv_errno);
+	if (set_dictcmnt((DictFile *)(dl -> dict), buf))
+		longjmp(error_ret, serv_errno);
 	put_int(SJ3_NormalEnd);
 }
 
