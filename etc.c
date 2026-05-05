@@ -270,7 +270,7 @@ void exec_sjrc(void)
 		if (*RCfile == '\0')
 	        {
 			(void) wcstombs((char *)SUCCorFAIL, WCNOTHsjrc, BUFFLENGTH);
-			sprintf((char *)tmp, (char *)SUCCorFAIL);
+			sprintf((char *)tmp, "%s", (char *)SUCCorFAIL);
 			(void) mbstowcs(wtmp, tmp, BUFFLENGTH);
 		}
 		else
