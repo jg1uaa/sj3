@@ -140,7 +140,7 @@ int getyomi(wchar16_t *yomi, int lim, wchar16_t *prompt, wchar16_t *kanji)
 	else
        {
 	       (void) wcstombs((char *)ytmp, WCMyomi, YOMILEN+1);
-	       (void) sprintf ((char *)tmp, (char *)ytmp);
+	       (void) sprintf ((char *)tmp, "%s", (char *)ytmp);
                (void) mbstowcs(wtmp, (char *)tmp, BUFFLENGTH);
        }
 
