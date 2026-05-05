@@ -37,8 +37,7 @@
 
 #include "sj_kcnv.h"
 
-void	seg_count(dfp)
-DictFile	*dfp;
+void	seg_count(DictFile *dfp)
 {
 	unsigned char	*p;
 	unsigned char	*q;
@@ -58,8 +57,7 @@ DictFile	*dfp;
 	dfp->dict.segunit = (segcnt == 0) ? 1 : segcnt;
 }
 
-void	mkidxtbl(dfp)
-DictFile	*dfp;
+void	mkidxtbl(DictFile *dfp)
 {
 	unsigned char	*p;
 	TypeDicSeg	seg;
@@ -79,7 +77,7 @@ DictFile	*dfp;
 	}
 }
 
-void	initwork()
+void	initwork(void)
 {
 	jrt1st = jrt2nd = maxjptr = (JREC *)0;
 	clt1st = clt2nd = maxclptr = (CLREC *)0;
