@@ -38,6 +38,7 @@
 #define _GNU_SOURCE
 #endif
 
+#include <stdlib.h>
 #include <string.h>
 #include <signal.h>
 #include <errno.h>
@@ -50,6 +51,7 @@
 #include <unistd.h>
 #include <time.h>
 #include <locale.h>
+#include <pwd.h>
 #if defined(__linux__)
 #include <pty.h>
 #include <utmp.h> // need for login_tty()
@@ -186,8 +188,7 @@ static void init_env(void)
 {
 	char *uname, *hp, *tname;
         int  i;
-	struct passwd  *pwd, *getpwnam(), *getpwuid();
-	char	*getlogin(), *getenv();
+	struct passwd  *pwd;
 
 	user_name[0] = '\0';
 	home[0] = '\0';
@@ -659,7 +660,6 @@ void getslave(void)
 void execcmd(char* cmd, char** ap)
 {
 	int	c;
-	char	*getenv ();
 	char	*path, *cp, fullcmd[BUFSIZ];
 
 	path = getenv ("PATH");
