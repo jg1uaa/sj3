@@ -40,10 +40,7 @@
 #include <sys/types.h>
 #include "sj_kcnv.h"
 #include "kanakan.h"
-
-
-int	sj2cd_str();
-void	mvmemd(), mvmemi();
+#include "sj3priv.h"
 
 static unsigned char* delcldata(unsigned char* ycode);
 static int delclold(void);

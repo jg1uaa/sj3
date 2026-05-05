@@ -42,10 +42,7 @@
 #include "sj_hinsi.h"
 #include "sj_yomi.h"
 #include "kanakan.h"
-
-
-int	sj2cd_str();
-void	mvmemi(), mvmemd(), mkidxtbl();
+#include "sj3priv.h"
 
 
 
@@ -403,6 +400,6 @@ chg_uidx (TypeDicSeg seg, unsigned char *yomi, int len)
 
 	(*curdict->putidx)(curdictDF, 0);
 
-	mkidxtbl(curdict);
+	mkidxtbl(curdictDF);
 }
 

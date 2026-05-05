@@ -40,10 +40,9 @@
 #include "sj_rename.h"
 #include "const.h"
 #include "sj_typedef.h"
+#include "sj3priv.h"
 
-int	cmpstr(src, dst)
-unsigned char	*src;
-unsigned char	*dst;
+int	cmpstr(unsigned char *src, unsigned char *dst)
 {
 	while (*src) {
 		if (*src != *dst) return FALSE;

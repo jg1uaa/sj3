@@ -39,10 +39,10 @@
 #include <string.h>
 #include "sj_kcnv.h"
 #include "kanakan.h"
+#include "sj3priv.h"
 
 
-int	sj2cd_chr();
-void	cvtclknj(), freework();
+void	cvtclknj();
 
 
 static CLREC* nextrecblk(void);

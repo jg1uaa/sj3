@@ -38,10 +38,7 @@
 
 
 #include "sj_kcnv.h"
-
-
-
-void	cvtkouho(), setstyrec();
+#include "kanakan.h"
 
 
 
