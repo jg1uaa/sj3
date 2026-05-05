@@ -39,8 +39,7 @@
 #include <string.h>
 #include "sj_kcnv.h"
 #include "kanakan.h"
-
-void	mvmemi(), mvmemd();
+#include "sj3priv.h" 
 
 int
 study(STDYOUT *stdy)

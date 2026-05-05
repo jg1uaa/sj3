@@ -371,7 +371,6 @@ douon_knj(DouonRec* drec)
 	int	i;
 	int	len = 0;
 	unsigned char	*p;
-	unsigned char	*knjofscvt();
 	HinsiRec *hrec;
 	KanjiRec *krec;
 
