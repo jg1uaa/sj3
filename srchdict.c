@@ -101,7 +101,7 @@ srchdict(unsigned char* tagp)
 
 		segno = srchidx(prevseg, (int)dicinl);
 
-		(*curdict->getdic)(curdict, segno);
+		(*curdict->getdic)(curdictDF, segno);
 
 		if (prevseg != segno) {
 
@@ -120,7 +120,7 @@ srchdict(unsigned char* tagp)
 
 				if (segno >= curdict->segunit) return NULL;
 
-				(*curdict->getdic)(curdict, segno);
+				(*curdict->getdic)(curdictDF, segno);
 
 				tagp = dicbuf;
 			}

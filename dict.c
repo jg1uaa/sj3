@@ -92,8 +92,8 @@ seldict(TypeDicID id)
 unsigned char*
 get_idxptr(TypeDicSeg seg)
 {
-	(*curdict->getofs)(curdict);
-	(*curdict->getidx)(curdict);
+	(*curdict->getofs)(curdictDF);
+	(*curdict->getidx)(curdictDF);
 
 	return idxbuf + idxofs[seg];
 }

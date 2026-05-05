@@ -119,7 +119,7 @@ cl_kanji(JREC* jrec, CLREC* clrec)
 
 	
 	if (seldict(jrec -> dicid)) {
-		(*curdict->getdic)(curdict, jrec -> jseg);
+		(*curdict->getdic)(curdictDF, jrec -> jseg);
 		ptr = dicbuf + jrec->jofsst + 1;
 
 		get_askknj();
@@ -457,7 +457,7 @@ cl_numcmn(JREC* jrec, CLREC* clrec)
 
 		
 		if (seldict(jrec -> dicid)) {
-			(*curdict->getdic)(curdict, jrec -> jseg);
+			(*curdict->getdic)(curdictDF, jrec -> jseg);
 
 			
 			p = dicbuf + jrec->jofsst + 1;

@@ -17,7 +17,7 @@
 #ifndef SJ3_SJ3PRIV_H_
 #define SJ3_SJ3PRIV_H_
 
-#include "sj_struct.h"
+#include "Struct.h"
 
 #ifndef _WCHARH // "wchar16.h" not included
 typedef unsigned short wchar16_t;
@@ -31,8 +31,8 @@ void setclrec(JREC *, unsigned char *, TypeCnct);
 void srchfzk(JREC *, unsigned char *, TypeCnct, int);
 
 /* init.c */
-void seg_count(DICT *);
-void mkidxtbl(DICT *);
+void seg_count(DictFile *);
+void mkidxtbl(DictFile *);
 void initwork(void);
 
 /* main.c */

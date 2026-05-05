@@ -37,42 +37,43 @@
 
 #include "sj_kcnv.h"
 
-void	seg_count(dict)
-DICT	*dict;
+void	seg_count(dfp)
+DictFile	*dfp;
 {
 	unsigned char	*p;
 	unsigned char	*q;
 	TypeDicSeg	segcnt = 0;
 
-	if (dict-> getidx) {
-		(*dict->getidx)(dict);
+	if (dfp->dict.getidx) {
+		(*dfp->dict.getidx)(dfp);
 
 		p = idxbuf;
-		q = p + dict->idxlen;
+		q = p + dfp->dict.idxlen;
 		while (p < q && *p) {
 			segcnt++;
 			while (*p++) ;
 		}
 	}
 
-	dict->segunit = (segcnt == 0) ? 1 : segcnt;
+	dfp->dict.segunit = (segcnt == 0) ? 1 : segcnt;
 }
 
-void	mkidxtbl(dict)
-DICT	*dict;
+void	mkidxtbl(dfp)
+DictFile	*dfp;
 {
 	unsigned char	*p;
 	TypeDicSeg	seg;
 
-	if (!dict->getidx || !dict->getofs) return;
+	if (!dfp->dict.getidx || !dfp->dict.getofs) return;
 
 	seg = 0;
 
-	(*dict->getidx)(dict);
-	(*dict->getofs)(dict);
+	(*dfp->dict.getidx)(dfp);
+	(*dfp->dict.getofs)(dfp);
 
 	idxofs[0] = 0;
-	for (p = idxbuf ; p < idxbuf + dict->idxlen && seg < dict->segunit ; ) {
+	for (p = idxbuf ;
+	     p < idxbuf + dfp->dict.idxlen && seg < dfp->dict.segunit ; ) {
 		idxofs[seg++] = p - idxbuf;
 		while (*p++) ;
 	}

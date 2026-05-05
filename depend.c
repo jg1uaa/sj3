@@ -324,7 +324,7 @@ DictFile* opendict(char* name, char* passwd)
 	if ((dfp -> ofsptr = (TypeIdxOfs *)malloc(i)) == NULL) {
 		serv_errno = SJ3_NotEnoughMemory; goto error3;
 	}
-	mkidxtbl(&(dfp -> dict));
+	mkidxtbl(dfp);
 
 	dfp -> link         = dictlink;
 	dictlink = dfp;

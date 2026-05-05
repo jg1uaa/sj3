@@ -125,7 +125,7 @@ cvtdict(KHREC *krec, CLREC *clrec, int flg)
 	
 	if (ofs) {
 		if (seldict(jrec -> dicid)) {
-			(*curdict->getdic)(curdict, jrec -> jseg);
+			(*curdict->getdic)(curdictDF, jrec -> jseg);
 			get_askknj();
 			kanjitmp +=
 				getkanji(yptr, jlen, dicbuf + ofs, kanjitmp);

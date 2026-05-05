@@ -401,7 +401,7 @@ chg_uidx (TypeDicSeg seg, unsigned char *yomi, int len)
 
 	while (len--) *p++ = *yomi++;
 
-	(*curdict->putidx)(curdict, 0);
+	(*curdict->putidx)(curdictDF, 0);
 
 	mkidxtbl(curdict);
 }

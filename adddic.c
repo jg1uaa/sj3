@@ -99,7 +99,7 @@ unsigned int adddic(unsigned char* yomi, unsigned char* kanji, TypeGram  hinsi)
 	segnum = srchidx((TypeDicSeg)DicSegBase, cnvlen);
 
 	for ( ; ; ) {
-		(*curdict->getdic)(curdict, segnum);
+		(*curdict->getdic)(curdictDF, segnum);
 		i = srchkana(&p1, &saml);
 		dstofs = douofs = p1 - dicbuf;
 		hnsofs = knjofs = 0;
@@ -153,7 +153,7 @@ unsigned int adddic(unsigned char* yomi, unsigned char* kanji, TypeGram  hinsi)
 		        if ((unsigned int) freidx < getplen(p1) + nlen + 1)
 				return AD_OvflwIndex;
 
-			if ((*curdict->putdic)(curdict, curdict->segunit))
+			if ((*curdict->putdic)(curdictDF, curdict->segunit))
 				return AD_OvflwUsrDic;
 
 			sprt_seg(segnum, pos);
@@ -165,16 +165,16 @@ unsigned int adddic(unsigned char* yomi, unsigned char* kanji, TypeGram  hinsi)
 		if (segend(p1)) {
 			if ((unsigned int) freidx < cnvlen + 1) return AD_OvflwIndex;
 
-			if ((*curdict->putdic)(curdict, curdict->segunit))
+			if ((*curdict->putdic)(curdictDF, curdict->segunit))
 				return AD_OvflwUsrDic;
 			curdict->segunit++;
 
-			(*curdict->getdic)(curdict, curdict->segunit - 1);
+			(*curdict->getdic)(curdictDF, curdict->segunit - 1);
 			memset(dicbuf, DicSegTerm, (int)curdict->seglen);
 			dicbuf[0] = 0;
-			(*curdict->putdic)(curdict, curdict->segunit - 1);
-			(*curdict->rszdic)(curdict, curdict->segunit);
-			mkidxtbl(curdict);
+			(*curdict->putdic)(curdictDF, curdict->segunit - 1);
+			(*curdict->rszdic)(curdictDF, curdict->segunit);
+			mkidxtbl(curdictDF);
 
 			segnum++;
 		}
@@ -184,7 +184,7 @@ unsigned int adddic(unsigned char* yomi, unsigned char* kanji, TypeGram  hinsi)
 			if ((unsigned int) freidx < getplen(p1) + nlen + 1)
 				return AD_OvflwIndex;
 
-			if ((*curdict->putdic)(curdict, curdict->segunit))
+			if ((*curdict->putdic)(curdictDF, curdict->segunit))
 				return AD_OvflwUsrDic;
 
 			sprt_seg(segnum, douofs);
@@ -251,7 +251,7 @@ unsigned int adddic(unsigned char* yomi, unsigned char* kanji, TypeGram  hinsi)
 
 	if (!knjofs) *dstptr++ = HinsiBlkTerm;
 
-	(*curdict->putdic)(curdict, segnum);
+	(*curdict->putdic)(curdictDF, segnum);
 
 	if (StudyExist()) {
 		size -= nxtask;
@@ -407,13 +407,13 @@ static void sprt_seg(TypeDicSeg seg, TypeDicOfs ofs)
 	STDYIN		*stdy;
 
 	for (s = curdict->segunit - 1 ; s >= seg ; s--) {
-		(*curdict->getdic)(curdict, s);
-		(*curdict->putdic)(curdict, s + 1);
+		(*curdict->getdic)(curdictDF, s);
+		(*curdict->putdic)(curdictDF, s + 1);
 	}
 	curdict->segunit++;
-	(*curdict->rszdic)(curdict, curdict->segunit);
+	(*curdict->rszdic)(curdictDF, curdict->segunit);
 
-	(*curdict->getdic)(curdict, seg + 1);
+	(*curdict->getdic)(curdictDF, seg + 1);
 
 	pos = dicbuf + ofs;
 
@@ -443,7 +443,7 @@ static void sprt_seg(TypeDicSeg seg, TypeDicOfs ofs)
 	p += i;
 	memset(p, DicSegTerm, (dicbuf + curdict->seglen - p));
 
-	(*curdict->putdic)(curdict, seg + 1);
+	(*curdict->putdic)(curdictDF, seg + 1);
 
 	if (StudyExist()) {
 		dicid = curdict -> dicid;
@@ -461,9 +461,9 @@ static void sprt_seg(TypeDicSeg seg, TypeDicOfs ofs)
 		}
 	}
 
-	(*curdict->getdic)(curdict, seg);
+	(*curdict->getdic)(curdictDF, seg);
 	memset(dicbuf + ofs, DicSegTerm, (int)(curdict->seglen - ofs));
-	(*curdict->putdic)(curdict, seg);
+	(*curdict->putdic)(curdictDF, seg);
 }
 
 
@@ -481,7 +481,7 @@ static void apnd_uidx(TypeDicSeg seg, unsigned char* yomi, int len)
 	while (len--) *p++ = *yomi++;
 	*p = 0;
 
-	(*curdict->putidx)(curdict, 0);
+	(*curdict->putidx)(curdictDF, 0);
 
-	mkidxtbl(curdict);
+	mkidxtbl(curdictDF);
 }

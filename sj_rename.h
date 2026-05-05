@@ -196,6 +196,7 @@
 #define	kouhotbl	(work_base -> Jkouhotbl)
 #define	stdytop		(work_base -> Jstdytop)
 #define	curdict		(work_base -> Jcurdict)
+#define	curdictDF	((DictFile *) curdict)
 #define	dictlist	(work_base -> Jdictlist)
 #define	dicbuf		(work_base -> Jdicbuf)
 #define	idxbuf		(work_base -> Jidxbuf)

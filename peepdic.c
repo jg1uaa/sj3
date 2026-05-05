@@ -64,7 +64,7 @@ getusr (unsigned char *buf)
 
 	peepyomi[0] = peepknj[0] = peepgrm = 0;
 
-	(*curdict->getdic)(curdict, peepidx = DicSegBase);
+	(*curdict->getdic)(curdictDF, peepidx = DicSegBase);
 	get_askknj();
 
 	peepdptr = segtop();
@@ -92,7 +92,7 @@ getusr (unsigned char *buf)
 int
 nextusr (unsigned char *buf)
 {
-	(*curdict->getdic)(curdict, peepidx);
+	(*curdict->getdic)(curdictDF, peepidx);
 	get_askknj();
 
 	if (next_kanji()) {
@@ -109,7 +109,7 @@ nextusr (unsigned char *buf)
 int
 prevusr (unsigned char *buf)
 {
-	(*curdict->getdic)(curdict, peepidx);
+	(*curdict->getdic)(curdictDF, peepidx);
 	get_askknj();
 
 	if (prev_kanji()) {
@@ -217,7 +217,7 @@ prev_douon (void)
 	if (peepdptr <= segtop()) {
 		if (peepidx <= DicSegBase) return 0;
 
-		(*curdict->getdic)(curdict, --peepidx);
+		(*curdict->getdic)(curdictDF, --peepidx);
 		get_askknj();
 
 		set_idxyomi();
@@ -301,7 +301,7 @@ next_douon (void)
 
 	if (segend(p1)) {
 		if (peepidx + 1 < curdict->segunit) {
-			(*curdict->getdic)(curdict, ++peepidx);
+			(*curdict->getdic)(curdictDF, ++peepidx);
 			get_askknj();
 			peepdptr = segtop();
 

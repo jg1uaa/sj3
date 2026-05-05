@@ -55,7 +55,7 @@ ph_setsty (CLREC *clrec)
 		return;
 	}
 
-	(*curdict->getdic)(curdict, jrec -> jseg);
+	(*curdict->getdic)(curdictDF, jrec -> jseg);
 	ptr = dicbuf + jrec->jofsst + 1;
 
 	for ( ; *ptr != HinsiBlkTerm ; ptr = skipkstr(ptr)) {

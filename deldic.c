@@ -40,11 +40,7 @@
 #include <string.h>
 #include "sj_kcnv.h"
 #include "kanakan.h"
-
-
-void	mvmemi();
-void	mkidxtbl();
-
+#include "sj3priv.h"
 
 static int del_douon(TypeDicSeg seg, unsigned char* ptr, TypeDicOfs ofs);
 static int del_segment(TypeDicSeg seg);
@@ -80,7 +76,7 @@ deldic(unsigned char* yomi, unsigned char* kanji, TypeGram hinsi)
 	cnvlen = strlen(yptr);
 
 	useg = srchidx((TypeDicSeg)DicSegBase, cnvlen);
-	(*curdict->getdic)(curdict, useg);
+	(*curdict->getdic)(curdictDF, useg);
 
 	if ((dblknum = srchkana(&p1, &samlen)) == 0) return AD_NoMidasi;
 
@@ -122,7 +118,7 @@ deldic(unsigned char* yomi, unsigned char* kanji, TypeGram hinsi)
 	set_size(p1, (int)(getsize(p1) - size),
 			(int)getplen(p1), (int)getnlen(p1));
 
-	(*curdict->putdic)(curdict, useg);
+	(*curdict->putdic)(curdictDF, useg);
 
 	del_stdy(useg, ofs, size);
 
@@ -172,7 +168,7 @@ del_douon(TypeDicSeg seg, unsigned char* ptr, TypeDicOfs ofs)
 		}
 	}
 
-	(*curdict->putdic)(curdict, seg);
+	(*curdict->putdic)(curdictDF, seg);
 
 	del_stdy(seg, ofs, size);
 
@@ -191,18 +187,18 @@ del_segment(TypeDicSeg seg)
 
 	if (curdict->segunit > 1) {
 		for (sg = seg + 1 ; sg < curdict->segunit ; sg++) {
-			(*curdict->getdic)(curdict, sg);
-			(*curdict->putdic)(curdict, sg - 1);
+			(*curdict->getdic)(curdictDF, sg);
+			(*curdict->putdic)(curdictDF, sg - 1);
 		}
 		curdict->segunit--;
 	}
 	else {
 		memset(dicbuf, DicSegTerm, (int)curdict->seglen);
 		dicbuf[0] = 0;
-		(*curdict->putdic)(curdict, DicSegBase);
+		(*curdict->putdic)(curdictDF, DicSegBase);
 	}
 
-	(*curdict->rszdic)(curdict, curdict->segunit);
+	(*curdict->rszdic)(curdictDF, curdict->segunit);
 
 	del_uidx(seg);
 
@@ -252,9 +248,9 @@ del_uidx(TypeDicSeg seg)
 	len = q - p;
 	memset(idxbuf + curdict->idxlen - len, 0, len);
 
-	(*curdict->putidx)(curdict, 0);
+	(*curdict->putidx)(curdictDF, 0);
 
-	mkidxtbl(curdict);
+	mkidxtbl(curdictDF);
 }
 
 
