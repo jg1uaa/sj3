@@ -415,9 +415,11 @@ void init_code_val(void)
 
 int init_messages(void)
 {
+#ifdef __sony_news
 #define LOCALELEN 20
 	char cur_loc[LOCALELEN];
 	char *loc;
+#endif
         short message_len[CURMESSAGES];
 	int ret;
 	int i;
