@@ -169,9 +169,10 @@ static	unsigned char	*get_flag(unsigned char *p, void *pv_dst)
 }
 
 
-static unsigned char* get_list(unsigned char* p, StrList** dst)
+static unsigned char* get_list(unsigned char* p, void* pv_dst)
 {
 	StrList	*s1, *s2;
+	StrList	**dst = pv_dst;
 
 	if (*p) {
 		s1 = (StrList *)malloc(sizeof(StrList));
@@ -208,7 +209,7 @@ static unsigned char* get_list(unsigned char* p, StrList** dst)
 
 struct	optlist {
 	char	*optname;
-	unsigned char	*(*optfunc)();
+	unsigned char	*(*optfunc)(unsigned char *, void *);
 	void	*optarg;
 } option[] = {
 /*
