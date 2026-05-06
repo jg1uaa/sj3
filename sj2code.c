@@ -39,10 +39,9 @@
 #include "sj_euc.h"
 #include "sj_kcnv.h"
 #include "sj_yomi.h"
+#include "sj3priv.h"
 
-int	sj2cd_chr(euc, yomi)
-unsigned char	*euc;
-unsigned char	*yomi;
+int	sj2cd_chr(unsigned char *euc, unsigned char *yomi)
 {
 	unsigned char	chr;
 
@@ -117,10 +116,7 @@ unsigned char	*yomi;
 
 
 
-int	sj2cd_str(euc, yomi, len)
-unsigned char	*euc;
-unsigned char	*yomi;
-int	len;
+int	sj2cd_str(unsigned char *euc, unsigned char *yomi, int len)
 {
 	
 	if (!len--) return FALSE;

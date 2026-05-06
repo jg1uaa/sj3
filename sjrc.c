@@ -67,7 +67,7 @@ static int	file_code = SYS_SJIS;
 
 struct functbl {
 	char *keyword;
-	void (*func)();
+	void (*func)(struct wordent[]);
 } funcs[] = {
 	{"dictionary",	set_dict},
 	{"userdic",	set_dict},
