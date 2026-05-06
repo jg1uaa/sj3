@@ -400,7 +400,7 @@ void disp_mode(void)
 {
 	Conversion	*cv;
 	int	c_code;
-	wchar16_t	*Pmode, *Bmode;
+	wchar16_t	*Pmode = NULL, *Bmode = NULL;
 	cv = GetConversion ();
 	switch (cv->Imode) {
 	case MODE_CODE:
