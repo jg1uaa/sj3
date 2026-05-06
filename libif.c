@@ -49,7 +49,7 @@ extern        int     dict_num;
 
 extern        int     current_locale;
 
-int (*len_func[3])() = {0, sjislen, euclen};
+int (*len_func[3])(unsigned char *, int) = {0, sjislen, euclen};
 
 
 #define YOMILEN 32
