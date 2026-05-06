@@ -41,18 +41,11 @@
 #include "sj_hinsi.h"
 #include "sj_right.h"
 #include "sj_yomi.h"
+#include "sj3priv.h"
 
 
 
-CLREC	*argclrec();
-int	terminate();
-
-
-
-static	int	fzkstrcmp(yptr, fzkp, saml)
-unsigned char	*yptr;
-unsigned char	*fzkp;
-int	*saml;
+static	int	fzkstrcmp(unsigned char *yptr, unsigned char *fzkp, int *saml)
 {
 	int	asklen, nkrlen;
 
@@ -93,10 +86,7 @@ int	*saml;
 
 
 
-void	setclrec(jrec, yptr, right)
-JREC		*jrec;		
-unsigned char	*yptr;
-TypeCnct	right;		
+void	setclrec(JREC *jrec, unsigned char *yptr, TypeCnct right)
 {
 	CLREC		*new;
 	TypeGram	hinsi;
@@ -181,9 +171,7 @@ TypeCnct	right;
 		new -> kubun = K_TAIGEN;
 }
 
-static	int	fzkcnct(right, left)
-TypeCnct	right;
-TypeCnct	left;
+static	int	fzkcnct(TypeCnct right, TypeCnct left)
 {
 	unsigned char	*cncttbl;
 
@@ -197,11 +185,7 @@ TypeCnct	left;
 	return FALSE;
 }
 
-void	srchfzk(jrec, yptr, right, level)
-JREC		*jrec;			
-unsigned char	*yptr;
-TypeCnct	right;			
-int		level;
+void	srchfzk(JREC *jrec, unsigned char *yptr, TypeCnct right, int level)
 {
 	unsigned char	*fzk;
 	int	len = 0;

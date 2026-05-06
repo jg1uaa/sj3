@@ -133,10 +133,10 @@ static unsigned char *put_ndata(void *p, int n)
 	return pp;
 }
 
-static int put_over(int buflen, int n, unsigned char *(*func1)(), void *str1, int len1, unsigned char *(*func2)(), void *str2, int len2, unsigned char *(*func3)(), void *str3, int len3, unsigned char *(*func4)(), void *str4, int len4)
+static int put_over(int buflen, int n, unsigned char *(*func1)(void *, int), void *str1, int len1, unsigned char *(*func2)(void *, int), void *str2, int len2, unsigned char *(*func3)(void *, int), void *str3, int len3, unsigned char *(*func4)(void *, int), void *str4, int len4)
 {
 #define ARGNUM 4
-	unsigned char *(*func[ARGNUM])();
+	unsigned char *(*func[ARGNUM])(void *, int);
 	unsigned char *data[ARGNUM];
 	int len[ARGNUM];
 	int i;

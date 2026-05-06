@@ -39,11 +39,7 @@
 #include <string.h>
 #include "sj_kcnv.h"
 #include "kanakan.h"
-
-
-void	mkknjmax();
-void	mvmemi(), free_clall();
-void	free_jall();
+#include "sj3priv.h"
 
 
 

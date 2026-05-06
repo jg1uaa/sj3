@@ -37,13 +37,14 @@
 
 #include "sj_kcnv.h"
 #include "sj_right.h"
+#include "sj3priv.h"
+#include "kanakan.h"
 
-int	terminate(), priority();
-void	mkjiritu(), mkbunsetu(), wakachi(), pritiny();
-void	free_clall(), free_jall();
+/* priority.c */
+int	priority(CLREC *);
+void	pritiny(void);
 
-static	int	set2nd(clrec)
-CLREC	*clrec;
+static	int	set2nd(CLREC *clrec)
 {
 
 	CLREC	*rec2;

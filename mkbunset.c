@@ -41,9 +41,7 @@
 #include "sj_kcnv.h"
 #include "sj_hinsi.h"
 #include "kanakan.h"
-
-int	terminate();
-void	setclrec(), srchfzk();
+#include "sj3priv.h"
 
 void
 mkbunsetu(void)
