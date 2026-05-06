@@ -38,15 +38,12 @@
 
 
 #include "sj_kcnv.h"
+#include "sj3priv.h"
+#include "kanakan.h"
 
 
 
-void	free_clall(), free_jall(), mkjiritu(), mkbunsetu();
-void	wakachi();
-
-
-
-void	selclrec()
+void	selclrec(void)
 {
 	int	len;
 	CLREC	*rec;

@@ -38,11 +38,9 @@
 #include "sj_rename.h"
 #include "sj_typedef.h"
 #include "sj_dict.h"
+#include "kanakan.h"
 
-unsigned char	*skipkstr();
-
-unsigned char	*skiphblk(ptr)
-unsigned char	*ptr;
+unsigned char	*skiphblk(unsigned char *ptr)
 {
 	ptr++;
 

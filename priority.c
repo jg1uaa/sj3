@@ -40,8 +40,7 @@
 #include "sj_right.h"
 #include "sj_prty.h"
 
-static	int	isfukusi(hinsi)
-TypeGram	hinsi;
+static	int	isfukusi(TypeGram hinsi)
 {
 	if (FUKUSI_1 <= hinsi && hinsi <= FUKUSI_7)
 		return TRUE;
@@ -50,8 +49,7 @@ TypeGram	hinsi;
 	return FALSE;
 }
 
-static	int	istaigen(right)
-TypeCnct	right;
+static	int	istaigen(TypeCnct right)
 {
 	if (right == R_MEISI || right == R_DMEISI || right == R_SMEISI1)
 		return TRUE;
@@ -62,9 +60,7 @@ TypeCnct	right;
 	return FALSE;
 }
 
-static	int	taicnt(hinsi1, hinsi2)
-TypeGram	hinsi1;
-TypeGram	hinsi2;
+static	int	taicnt(TypeGram hinsi1, TypeGram hinsi2)
 {
 	if (hinsi2 == TANKANJI) return 0;
 
@@ -91,9 +87,7 @@ TypeGram	hinsi2;
 	}
 }
 
-static	int	sttcnt(hinsi1, hinsi2)
-TypeGram	hinsi1;
-TypeGram	hinsi2;
+static	int	sttcnt(TypeGram hinsi1, TypeGram hinsi2)
 {
 	if (SETTOU_1 <= hinsi1 && hinsi1 <= SETTOU_5) {
 		if (MEISI_1 <= hinsi2 && hinsi2 <= SUUSI)
@@ -102,8 +96,7 @@ TypeGram	hinsi2;
 	return 4;
 }
 
-int	priority(clrec)
-CLREC	*clrec;
+int	priority(CLREC *clrec)
 {
 	int		prty;
 	CLREC		*cl2rec;
@@ -251,7 +244,7 @@ finish:
 }
 
 
-void	pritiny()
+void	pritiny(void)
 {
 	CLREC	*clrec;
 	int	keeplen;
