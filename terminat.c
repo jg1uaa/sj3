@@ -37,10 +37,9 @@
 
 #include "sj_kcnv.h"
 #include "sj_right.h"
+#include "sj3priv.h"
 
-int	terminate(right, yomi)
-TypeCnct	right;
-unsigned char	*yomi;
+int	terminate(TypeCnct right, unsigned char *yomi)
 {
 	unsigned char	ch;
 

@@ -41,7 +41,8 @@
 #include "sj_kcnv.h"
 #include "kanakan.h"
 
-int	istrcmp();
+/* istrcmp.c */
+int	istrcmp(unsigned char *, unsigned char *, int, int);
 
 TypeDicSeg
 srchidx(TypeDicSeg low, int len)

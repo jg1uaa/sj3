@@ -37,11 +37,9 @@
 
 #include "sj_rename.h"
 #include "sj_typedef.h"
+#include "sj3priv.h"
 
-void	mvmemd(src, dest, len)
-unsigned char	*src;
-unsigned char	*dest;
-int	len;
+void	mvmemd(unsigned char *src, unsigned char *dest, int len)
 {
 	while (len-- > 0) *(--dest) = *(--src);
 }
