@@ -41,9 +41,6 @@
 #include "kanakan.h"
 
 
-/* skiphblk.c */
-unsigned char	*skiphblk(unsigned char *);
-
 static	void	add_yomi (void);
 static	void	cd2sjh_chr (unsigned char ch, unsigned char *dst);
 static	int	next_douon (void);

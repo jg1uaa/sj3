@@ -199,6 +199,9 @@ int hiraknj_hira(unsigned char*, int*);
 unsigned char *getstb(TypeGram hinsi);
 void setubi(JREC *rec, unsigned char *stbtbl);
 
+/* skiphblk.c */
+unsigned char *skiphblk(unsigned char *);
+
 /* skipkstr.c */
 unsigned char* skipkstr(unsigned char* ptr);
 
