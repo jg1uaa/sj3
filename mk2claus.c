@@ -40,10 +40,6 @@
 #include "sj3priv.h"
 #include "kanakan.h"
 
-/* priority.c */
-int	priority(CLREC *);
-void	pritiny(void);
-
 static	int	set2nd(CLREC *clrec)
 {
 

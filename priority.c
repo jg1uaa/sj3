@@ -39,6 +39,7 @@
 #include "sj_hinsi.h"
 #include "sj_right.h"
 #include "sj_prty.h"
+#include "sj3priv.h"
 
 static	int	isfukusi(TypeGram hinsi)
 {

@@ -42,9 +42,6 @@
 #include "sj3priv.h"
 
 
-void	cvtclknj();
-
-
 static CLREC* nextrecblk(void);
 static CLREC* prevrecblk(void);
 static void initkbuf(unsigned char* kouho);

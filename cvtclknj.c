@@ -39,10 +39,11 @@
 
 #include "sj_kcnv.h"
 #include "kanakan.h"
+#include "sj3priv.h"
 
 
 
-void	cvtclknj()
+void	cvtclknj(void)
 {
 	KHREC	*krec;
 	int	i;

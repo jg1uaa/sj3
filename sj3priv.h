@@ -26,6 +26,9 @@ typedef unsigned short wchar16_t;
 /* cmpstr.c */
 int cmpstr(unsigned char *, unsigned char *);
 
+/* cvtclknj.c */
+void cvtclknj(void);
+
 /* fuzoku.c */
 void setclrec(JREC *, unsigned char *, TypeCnct);
 void srchfzk(JREC *, unsigned char *, TypeCnct, int);
@@ -59,6 +62,10 @@ void mvmemd(unsigned char *, unsigned char *, int);
 
 /* mvmemi.c */
 void mvmemi(unsigned char *, unsigned char *, int);
+
+/* priority.c */
+int priority(CLREC *);
+void pritiny(void);
 
 /* rk_conv.c */
 void sj3_rkcode(int);
