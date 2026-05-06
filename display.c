@@ -65,7 +65,7 @@ static int keyboard = OTHER_KB;
 
 void checkterm(void)
 {
-	char	*kb, *area, *tgetstr (), *tmp;
+	char	*kb, *area, *tmp;
 	int	val;
 	Conversion	*cv;
 
